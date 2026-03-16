@@ -11,7 +11,7 @@
                 {{ $value }}
             </div>
         @endsession
-
+        <livewire:components.buttons.social provider="google"/>
         <form method="POST" action="{{ route('login') }}">
             @csrf
 

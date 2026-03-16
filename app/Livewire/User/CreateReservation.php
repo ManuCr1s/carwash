@@ -8,6 +8,6 @@ class CreateReservation extends Component
 {
     public function render()
     {
-        return view('livewire.user.create-reservation');
+        return view('livewire.user.create-reservation')->layout('layouts.app');
     }
 }
