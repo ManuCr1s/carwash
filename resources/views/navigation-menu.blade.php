@@ -16,7 +16,7 @@
                         {{ __('Dashboard') }}
                     </x-nav-link>
                     @can('ver reserva')
-                    <x-nav-link href="{{ route('dashboard') }}" :active="request()->routeIs('dashboard')">
+                    <x-nav-link href="{{ route('booking.create') }}" :active="request()->routeIs('booking.create')">
                         {{ __('Reservas') }}
                     </x-nav-link>
                     @endcan
