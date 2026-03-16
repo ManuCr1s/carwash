@@ -15,6 +15,21 @@
                     <x-nav-link href="{{ route('dashboard') }}" :active="request()->routeIs('dashboard')">
                         {{ __('Dashboard') }}
                     </x-nav-link>
+                    @can('ver reserva')
+                    <x-nav-link href="{{ route('dashboard') }}" :active="request()->routeIs('dashboard')">
+                        {{ __('Reservas') }}
+                    </x-nav-link>
+                    @endcan
+                    @can('ver usuario')
+                    <x-nav-link href="{{ route('user.create') }}" :active="request()->routeIs('user.create')">
+                        {{ __('Usuarios') }}
+                    </x-nav-link>
+                    @endcan
+                    @can('ver estado')
+                    <x-nav-link href="{{ route('dashboard') }}" :active="request()->routeIs('dashboard')">
+                        {{ __('Estados') }}
+                    </x-nav-link>
+                    @endcan
                 </div>
             </div>
 
