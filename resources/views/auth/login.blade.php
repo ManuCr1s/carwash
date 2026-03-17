@@ -38,10 +38,10 @@
                         {{ __('¿Has olvidado tu contraseña?') }}
                     </a>
                 @endif
-
-                <x-button class="ms-4">
+                <button class="inline-flex items-center px-4 py-2 bg-[#0f1a26] border border-transparent rounded-md font-semibold text-xs text-[#e6b84a] uppercase tracking-widest hover:opacity-90 focus:bg-[#0f1a26] active:bg-[#0f1a26] focus:outline-none focus:ring-2 focus:ring-[#e6b84a] focus:ring-offset-2 disabled:opacity-50 transition ease-in-out duration-150 ms-4">
                     {{ __('Ingresar') }}
-                </x-button>
+                </button>
+                        
             </div>
         </form>
     </x-authentication-card>
