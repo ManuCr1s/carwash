@@ -7,8 +7,8 @@ use App\Http\Controllers\ProviderController;
 use App\Livewire\Admins\Users;
 
 Route::get('/', function () {
-    return view('welcome');
-});
+    return view('auth.login');
+})->middleware('guest');
 
 Route::middleware(['auth:sanctum',config('jetstream.auth_session'),'verified',])->group(function () {
     Route::get('/dashboard', function () {
