@@ -25,9 +25,9 @@
                         {{ __('Usuarios') }}
                     </x-nav-link>
                     @endcan
-                    @can('ver estado')
-                    <x-nav-link href="{{ route('dashboard') }}" :active="request()->routeIs('dashboard')">
-                        {{ __('Estados') }}
+                    @can('ver pedido')
+                    <x-nav-link href="{{ route('response.request') }}" :active="request()->routeIs('response.request')">
+                        {{ __('Atender') }}
                     </x-nav-link>
                     @endcan
                 </div>
@@ -110,11 +110,11 @@
                         <x-slot name="content">
                             <!-- Account Management -->
                             <div class="block px-4 py-2 text-xs text-gray-400">
-                                {{ __('Manage Account') }}
+                                {{ __('Administrar Cuenta') }}
                             </div>
 
                             <x-dropdown-link href="{{ route('profile.show') }}">
-                                {{ __('Profile') }}
+                                {{ __('Perfil') }}
                             </x-dropdown-link>
 
                             @if (Laravel\Jetstream\Jetstream::hasApiFeatures())
@@ -131,7 +131,7 @@
 
                                 <x-dropdown-link href="{{ route('logout') }}"
                                          @click.prevent="$root.submit();">
-                                    {{ __('Log Out') }}
+                                    {{ __('Cerrar Sesion') }}
                                 </x-dropdown-link>
                             </form>
                         </x-slot>
