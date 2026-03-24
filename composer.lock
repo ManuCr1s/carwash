@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "75daabd9c9078caca54288abc050226b",
+    "content-hash": "5171dea485428c648d8e573a73acbb83",
     "packages": [
         {
             "name": "bacon/bacon-qr-code",
@@ -4069,6 +4069,74 @@
                 "source": "https://github.com/ralouphie/getallheaders/tree/develop"
             },
             "time": "2019-03-08T08:55:37+00:00"
+        },
+        {
+            "name": "ramonrietdijk/livewire-tables",
+            "version": "v6.3.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/ramonrietdijk/livewire-tables.git",
+                "reference": "8d513bf924f6f1f4c1248421c6a858690fc0ce1e"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/ramonrietdijk/livewire-tables/zipball/8d513bf924f6f1f4c1248421c6a858690fc0ce1e",
+                "reference": "8d513bf924f6f1f4c1248421c6a858690fc0ce1e",
+                "shasum": ""
+            },
+            "require": {
+                "laravel/framework": "^12.0",
+                "livewire/livewire": "^3.0|^4.0",
+                "php": "^8.3"
+            },
+            "require-dev": {
+                "larastan/larastan": "^3.8",
+                "laravel/pint": "^1.26",
+                "orchestra/testbench": "^10.8",
+                "phpstan/phpstan-strict-rules": "^2.0",
+                "phpunit/phpunit": "^12.5",
+                "rector/rector": "^2.3"
+            },
+            "type": "package",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "RamonRietdijk\\LivewireTables\\ServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "RamonRietdijk\\LivewireTables\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Ramon Rietdijk",
+                    "email": "info@ramonrietdijk.nl"
+                }
+            ],
+            "description": "Dynamic tables for models with Laravel Livewire",
+            "keywords": [
+                "laravel",
+                "livewire",
+                "table"
+            ],
+            "support": {
+                "issues": "https://github.com/ramonrietdijk/livewire-tables/issues",
+                "source": "https://github.com/ramonrietdijk/livewire-tables/tree/v6.3.1"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/ramonrietdijk",
+                    "type": "github"
+                }
+            ],
+            "time": "2026-03-14T10:38:47+00:00"
         },
         {
             "name": "ramsey/collection",
