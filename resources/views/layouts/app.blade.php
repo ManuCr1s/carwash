@@ -41,6 +41,5 @@
         @stack('modals')
 
         @livewireScripts
-        @livewire('components.modals.main-modal')
     </body>
 </html>

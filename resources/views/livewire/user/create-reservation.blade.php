@@ -61,51 +61,51 @@
 
             <div class="w-full md:w-[65%] p-8 bg-white">
                 <div class="flex items-center justify-between mb-8">
-                    <h3 class="text-gray-600 font-medium">Horarios disponibles para la semana</h3>
+                    <h3 class="text-gray-600 font-medium">Horarios disponibles para el dia</h3>
                     <div class="flex gap-2">
                          </div>
                 </div>
 
-                <div class="grid grid-cols-5 gap-4">
-                    @foreach($weekDays as $day)
-                        <div class="flex flex-col items-center">
-                            <span class="text-[10px] font-bold text-gray-400 uppercase tracking-tighter mb-1">
-                                {{ $day->translatedFormat('D') }}
-                            </span>
-                            <span @class([
-                                'text-xl font-bold mb-6',
-                                'text-[#0f1a26]' => $day->format('Y-m-d') == $selectedDate,
-                                'text-gray-400' => $day->format('Y-m-d') != $selectedDate
-                            ])>
-                                {{ $day->day }}
-                            </span>
+                <div class="flex flex-col items-center">
 
-                            <div class="w-full space-y-3">
-                                @php 
-                                    $slots = ['09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00']; 
-                                @endphp
-                                @foreach($slots as $slot)
-                                    @php
-                                        $isPast = $this->isSlotPast($slot, $day->format('Y-m-d'));
-                                    @endphp
-                                   
-                                    <button 
-                                        wire:click="selectDate('{{ $selectedDate }}', '{{ $slot }}')"
-                                        @disabled($isPast)
-                                       @class([
-                                            'w-full py-2 px-1 border rounded text-sm font-semibold transition-all',
-                                            // Disponible
-                                            'border-blue-10 0 text-blue-600 hover:bg-blue-600 hover:text-white' => !$isPast,
-                                            // Pasado (Bloqueado)
-                                            'bg-gray-100 text-gray-400 border-gray-200 cursor-not-allowed opacity-50' => $isPast,
-                                        ])
-                                    >
-                                        {{ $slot }}
-                                    </button>
-                                @endforeach
-                            </div>
-                        </div>
-                    @endforeach
+                <!-- Día seleccionado -->
+                <span class="text-[10px] font-bold text-gray-400 uppercase tracking-tighter mb-1">
+                    {{ \Carbon\Carbon::parse($selectedDate)->translatedFormat('D') }}
+                </span>
+
+                <span class="text-xl font-bold mb-6 text-[#0f1a26]">
+                    {{ \Carbon\Carbon::parse($selectedDate)->day }}
+                </span>
+
+                    <!-- Horarios -->
+                    <div class="w-full space-y-3">
+                        @php 
+                            $slots = ['09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00']; 
+                        @endphp
+
+                        @foreach($slots as $slot)
+                            @php
+                                $isPast = $this->isSlotPast($slot, $selectedDate);
+                            @endphp
+
+                            <button 
+                                wire:click="selectDate('{{ $selectedDate }}', '{{ $slot }}')"
+                                @disabled($isPast)
+                                @class([
+                                    'w-full py-2 px-1 border rounded text-sm font-semibold transition-all',
+
+                                    // Disponible
+                                    'border-blue-100 text-blue-600 hover:bg-blue-600 hover:text-white' => !$isPast,
+
+                                    // Pasado
+                                    'bg-gray-100 text-gray-400 border-gray-200 cursor-not-allowed opacity-50' => $isPast,
+                                ])
+                            >
+                                {{ $slot }}
+                            </button>
+                        @endforeach
+                    </div>
+
                 </div>
             </div>
         </div>
