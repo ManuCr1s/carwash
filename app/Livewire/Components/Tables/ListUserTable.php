@@ -13,31 +13,7 @@ use Illuminate\Database\Eloquent\Builder;
 class ListUserTable extends LivewireTable
 {
     public $userId;
-    public $name;
-    public $email;
-    protected string $model = User::class;
-    public function confirmarEliminar($id)
-    {
-        $this->dispatch('open-modal', [
-            'title' => 'ELIMINAR USUARIO',
-            'message' => '¿Seguro que deseas eliminar?',
-            'type' => 'confirm',
-            'method' => 'eliminar',
-            'params' => $id
-        ]);
-    }
-    protected $listeners = ['eliminar'];
 
-    public function eliminar($id)
-    {
-        \App\Models\User::find($id)?->delete();
-
-        // opcional: feedback
-        $this->dispatch('open-modal', [
-            'title' => 'Éxito',
-            'message' => 'Usuario eliminado correctamente'
-        ]);
-    }
     public function query(): Builder
     {
       return User::query()
