@@ -6,11 +6,11 @@ use Livewire\Component;
 use RamonRietdijk\LivewireTables\Livewire\LivewireTable;
 use RamonRietdijk\LivewireTables\Columns\Column;
 use RamonRietdijk\LivewireTables\Columns\ActionColumn;
-use App\Models\User;
+use App\Models\Reservation;
 
 class ResponseRequestTable extends LivewireTable
 {
-     protected string $model = User::class;
+     protected string $model = Reservation::class;
      protected function columns(): array{
         return [
             Column::make(__('ID'),'id'),
