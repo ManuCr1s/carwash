@@ -69,8 +69,8 @@
                 <div class="flex flex-col items-center">
 
                 <!-- Día seleccionado -->
-                <span class="text-[10px] font-bold text-gray-400 uppercase tracking-tighter mb-1">
-                    {{ \Carbon\Carbon::parse($selectedDate)->translatedFormat('D') }}
+                <span class="text-[13px] font-bold text-gray-400 uppercase tracking-tighter mb-1">
+                    {{ \Carbon\Carbon::parse($selectedDate)->translatedFormat('l') }}
                 </span>
 
                 <span class="text-xl font-bold mb-6 text-[#0f1a26]">
@@ -79,29 +79,36 @@
 
                     <!-- Horarios -->
                     <div class="w-full space-y-3">
-                        @php 
-                            $slots = ['09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00']; 
-                        @endphp
-
                         @foreach($slots as $slot)
                             @php
                                 $isPast = $this->isSlotPast($slot, $selectedDate);
+                                $isOccupied = in_array($slot, $this->occupiedSlots);
                             @endphp
 
                             <button 
-                                wire:click="selectDate('{{ $selectedDate }}', '{{ $slot }}')"
-                                @disabled($isPast)
+                                wire:click="$dispatch('openReservationModal', {
+                                    date: '{{ $selectedDate }}',
+                                    slot: '{{ $slot }}'
+                                })"
+                                @disabled($isPast || $isOccupied)
                                 @class([
                                     'w-full py-2 px-1 border rounded text-sm font-semibold transition-all',
 
-                                    // Disponible
-                                    'border-blue-100 text-blue-600 hover:bg-blue-600 hover:text-white' => !$isPast,
+                                    // 🔴 Ocupado
+                                    'bg-red-100 text-red-400 border-red-200 cursor-not-allowed' => $isOccupied,
 
-                                    // Pasado
+                                    // ⚫ Pasado
                                     'bg-gray-100 text-gray-400 border-gray-200 cursor-not-allowed opacity-50' => $isPast,
+
+                                    // 🔵 Disponible
+                                    'border-blue-100 text-blue-600 hover:bg-blue-600 hover:text-white' => !$isPast && !$isOccupied,
                                 ])
                             >
                                 {{ $slot }}
+
+                                @if($isOccupied)
+                                    <span class="block text-xs">Ocupado</span>
+                                @endif
                             </button>
                         @endforeach
                     </div>
@@ -117,28 +124,5 @@
 
            
         </div>
+        <livewire:components.modals.create-reservation-modal />
     </div>
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
-<script>
-    document.addEventListener('livewire:init', () => {
-       Livewire.on('show-confirm-modal', (event) => {
-           const data = Array.isArray(event) ? event[0] : event;
-           Swal.fire({
-                title: '¿Confirmar reserva?',
-                text: "Has seleccionado el " + data.humanDate,
-                icon: 'question',
-                showCancelButton: true,
-                confirmButtonColor: '#2563eb',
-                cancelButtonColor: '#64748b',
-                confirmButtonText: 'Sí, reservar',
-                cancelButtonText: 'Cancelar'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    @this.confirmBooking();
-                }
-            });
-
-       });
-    });
-</script>

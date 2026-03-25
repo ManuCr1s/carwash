@@ -4,6 +4,8 @@ namespace App\Livewire\User;
 
 use Livewire\Component;
 use Carbon\Carbon;
+use App\Models\Reservation;
+use Livewire\Attributes\On;
 
 class CreateReservation extends Component
 {
@@ -12,6 +14,21 @@ class CreateReservation extends Component
     public $selectedDate;
     public $weekDays = [];
     public $selectedTime;
+    public $slots = [
+        '08:00', '09:00', '10:00',
+        '11:00', '12:00', '13:00',
+        '14:00', '15:00', '16:00'
+    ];
+    public function getOccupiedSlotsProperty()
+    {
+        return Reservation::where('date_reservation', $this->selectedDate)
+            ->pluck('time_reservation')
+            ->map(fn($time) => substr($time, 0, 5))
+            ->toArray();
+    }
+    #[On('reservationCreated')]
+    public function refreshComponent()
+    {}
     public function mount(){
         $this->year = $this->year ?? now()->year;
         $this->month = $this->month ?? now()->month;
@@ -99,9 +116,10 @@ class CreateReservation extends Component
     public function render()
     {
         $currentDate = \Carbon\Carbon::createFromDate($this->year, $this->month, 1);
+        $reservations = Reservation::orderBy('time_reservation')->orderBy('time_reservation')->get();
         return view('livewire.user.create-reservation',[
             'days' => $this->generateCalendar($currentDate),
-            'monthName' => $currentDate->translatedFormat('F Y'), 
+            'monthName' => $currentDate->translatedFormat('F Y')
         ])->layout('layouts.app');
     }
  /*   public function render()
