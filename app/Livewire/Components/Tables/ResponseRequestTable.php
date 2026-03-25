@@ -6,17 +6,39 @@ use Livewire\Component;
 use RamonRietdijk\LivewireTables\Livewire\LivewireTable;
 use RamonRietdijk\LivewireTables\Columns\Column;
 use RamonRietdijk\LivewireTables\Columns\ActionColumn;
+use RamonRietdijk\LivewireTables\Columns\ViewColumn;
 use App\Models\Reservation;
+use Illuminate\Database\Eloquent\Builder;
+use Livewire\Attributes\On;
 
 class ResponseRequestTable extends LivewireTable
 {
-     protected string $model = Reservation::class;
-     protected function columns(): array{
+    protected string $model = Reservation::class;
+    public $reservationId;
+    public function query(): Builder
+    {
+      return Reservation::query()
+            ->join('services', 'reservations.service_id', '=', 'services.id')
+            ->join('vehicles', 'reservations.vehicle_id', '=', 'vehicles.id')
+            ->select('services.name', 'vehicles.modelo','vehicles.marca','vehicles.placa','reservations.date_reservation','reservations.time_reservation')
+            ->where('reservations.state_id','=',1);
+    }
+    public function handle($id)
+    {
+        $this->dispatch('openHandleModal', id: $id);
+    }
+    #[On('tableRefresh')]
+    public function tableRefresh(): void {}
+    protected function columns(): array{
         return [
             Column::make(__('ID'),'id'),
             Column::make(__('Name'), 'name'),
-            Column::make(__('Email'), 'email'),
-            
+            Column::make(__('Marca'), 'marca'),
+            Column::make(__('Placa'), 'placa'),
+            Column::make(__('Modelo'), 'modelo'),   
+            Column::make(__('Dia'), 'date_reservation'),
+            Column::make(__('Hora'), 'time_reservation'),
+            ViewColumn::make('Acciones','components.table-reservation-action'),
         ];
      }
 
