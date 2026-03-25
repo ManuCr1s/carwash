@@ -9,10 +9,40 @@ use RamonRietdijk\LivewireTables\Columns\ActionColumn;
 use RamonRietdijk\LivewireTables\Columns\ViewColumn;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
+use Livewire\Attributes\On;
 
 class ListUserTable extends LivewireTable
 {
+    protected string $model = User::class;
     public $userId;
+    public function delete($id)
+    {
+        $user = User::find($id);
+    
+        if (!$user) {
+            $this->dispatch('swal', [
+                'icon'  => 'error',
+                'title' => 'Usuario no encontrado',
+            ]);
+            return;
+        }
+        $user->delete();
+
+        $this->dispatch('swal', [
+            'icon'  => 'success',
+            'title' => '¡Eliminado!',
+            'showConfirmButton' => true,
+        ]);
+    }
+    public function edit($id)
+    {
+        $this->dispatch('openEditModal', id: $id);
+    }
+    #[On('tableRefresh')]
+    public function tableRefresh(): void
+    {
+        // método vacío — Livewire re-renderiza automáticamente
+    }
 
     public function query(): Builder
     {
@@ -31,8 +61,8 @@ class ListUserTable extends LivewireTable
             ViewColumn::make('Acciones','components.table-user-action'),
         ];
     }
-    /*
-    public function render()
+    
+    /*public function render()
     {
         return view('livewire.components.tables.list-user-table');
     }*/
