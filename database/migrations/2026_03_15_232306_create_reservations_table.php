@@ -16,9 +16,10 @@ return new class extends Migration
             $table->foreignId('vehicle_id')->constrained('vehicles')->onDelete('cascade');
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->foreignId('service_id')->constrained('services')->onDelete('cascade');
-            $table->foreignId('state_id')->constrained('states')->onDelete('cascade');
+            $table->foreignId('state_id')->default(1)->constrained('states')->onDelete('cascade');
             $table->date('date_reservation');
             $table->time('time_reservation',precision:0);
+            $table->unique(['date_reservation', 'time_reservation']);
             $table->timestamps();
         });
     }
