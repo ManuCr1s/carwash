@@ -1,0 +1,125 @@
+<?php
+
+namespace App\Livewire\Components\Modals;
+
+use Livewire\Component;
+use App\Models\Reservation;
+use App\Models\Vehicle;
+use App\Models\Service;
+use App\Models\State;
+use Livewire\Attributes\On;
+use Illuminate\Validation\Rule;
+
+class CreateReservationModal extends Component
+{
+    public $date_reservation;
+    public $time_reservation;
+    public $placa;
+    public $marca;
+    public $modelo;
+    public $user_id;
+    public $service_id;
+    public $state_id = 1;
+    public bool $show = false;
+    protected $messages = [];
+
+    protected function rules(): array
+    {
+        return [
+            'placa' => 'required|min:6',
+            'modelo' => 'required',
+            'marca' => 'required',
+            'service_id' => 'required',
+            'date_reservation'  => 'required|date|after_or_equal:today',
+            'time_reservation' => [
+                'required',
+                'string',
+                Rule::unique('reservations', 'time_reservation')
+                    ->where(function ($query) {
+                        return $query->where('date_reservation', $this->date_reservation);
+                    }),
+            ],
+        ];
+    }
+    protected function messages(): array
+    {
+         return [
+            'placa.required' => 'La placa es obligatoria',
+            'placa.min' => 'La placa debe tener al menos 6 caracteres',
+
+            'marca.required' => 'La marca es obligatoria',
+            'modelo.required' => 'El modelo es obligatorio',
+
+            'service_id.required' => 'Debe seleccionar un servicio',
+
+            'date_reservation.required' => 'La fecha es obligatoria',
+            'date_reservation.after_or_equal' => 'La fecha debe ser hoy o posterior',
+
+            'time_reservation.required' => 'La hora es obligatoria',
+            'time_reservation.unique' => 'Este horario ya está reservado',
+        ];
+    }
+    #[On('openReservationModal')]
+    public function open($date = null, $slot = null)
+    {
+        if ($date) {
+            $this->date_reservation = $date?? null;
+            $this->time_reservation = $slot?? null;
+        }
+
+        $this->show = true;
+    }
+    public function save()
+    {
+        $this->validate();
+        $exists = Reservation::where('date_reservation', $this->date_reservation)
+            ->where('time_reservation', $this->time_reservation)
+            ->exists();
+
+        if ($exists) {
+            $this->dispatch('swal', [
+                'icon' => 'error',
+                'title' => 'Ese horario ya está ocupado'
+            ]);
+            return;
+        }
+        $vehicle = Vehicle::firstOrCreate(
+            ['placa' => $this->placa],
+            [
+                'marca' => $this->marca,
+                'modelo' => $this->modelo,
+                'user_id' => auth()->id(),
+            ]
+
+        );
+     
+        try {
+            Reservation::create([
+                'vehicle_id' => $vehicle->id,
+                'user_id' => auth()->id(),
+                'service_id' => $this->service_id,
+                'state_id' => $this->state_id,
+                'date_reservation' => $this->date_reservation,
+                'time_reservation' => $this->time_reservation,        
+            ]);
+        } catch (\Illuminate\Database\QueryException $e) {
+                $this->dispatch('swal', [
+                    'icon' => 'error',
+                    'title' => 'El horario ya fue reservado'
+                ]);
+                return;
+        }
+        
+        $this->dispatch('reservationCreated');
+        
+        $this->show = false;
+        $this->dispatch('swal', [
+            'icon' => 'success',
+            'title' => 'Reserva registrada correctamente'
+        ]);
+    }
+    public function render()
+    {
+        return view('livewire.components.modals.create-reservation-modal');
+    }
+}
