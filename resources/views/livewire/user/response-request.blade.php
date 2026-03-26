@@ -8,4 +8,4 @@
             <livewire:components.tables.response-request-table />
             <livewire:components.modals.handle-reservation-modal />
         </div>
-    </div
+</div>

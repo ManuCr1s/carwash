@@ -2,7 +2,7 @@
     @if($show)
     <div class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
 
-        <div class="bg-white rounded-xl shadow-2xl w-full max-w-lg mx-4">
+        <div class="bg-white rounded-lg shadow-xl w-full max-w-md mx-4 max-h-[90vh] flex flex-col">
 
             <!-- HEADER -->
             <div class="flex items-center justify-between px-6 py-4 border-b">
@@ -19,7 +19,7 @@
             </div>
 
             <!-- BODY -->
-            <div class="px-6 py-6 space-y-5">
+            <div class="px-6 py-6 space-y-4 overflow-y-auto">
 
              
                 <div>
@@ -32,29 +32,56 @@
                         <h4 class="font-semibold text-gray-700">Subir Fotos del Vehiculo</h4>
                     </div>
 
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="grid grid-cols-1 md:grid-cols-1 gap-4">
+                        <div wire:ignore
+                            x-data="{ pond: null }"
+                            x-init="
+                                    FilePond.setOptions({
+                                        // Configuración Global de etiquetas en ESPAÑOL
+                                        labelIdle: 'Arrastra las fotos del vehículo o <span class=\'filepond--label-action\'>Busca</span>',
+                                        labelMaxFilesExceeded: 'Solo puedes subir 3 fotos',
+                                        labelFileTypeNotAllowed: 'Formato de archivo inválido',
+                                        fileValidateTypeDetectType: (source, type) => new Promise((resolve, reject) => {
+                                            resolve(type);
+                                        })
+                                    });
 
-                        <div class="md:col-span-2">
-                            <input type="text" wire:model="placa"
-                                placeholder="Placa (Ej: ABC123)"
-                                class="w-full border rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500">
-                            @error('placa') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
+                                    pond = FilePond.create($refs.input, {
+                                        // --- LIMITACIÓN ---
+                                        allowMultiple: true,
+                                        maxFiles: 3,
+                                        required: true, // No deja enviar si no hay 3 fotos
+
+                                        // --- VALIDACIÓN ---
+                                        acceptedFileTypes: ['image/jpeg', 'image/png'],
+
+                                        // --- COMPRESIÓN Y REDIMENSIONADO ---
+                                        allowImageResize: true,
+                                        imageResizeTargetWidth: 800, // Ancho máximo
+                                        imageResizeMode: 'contain', // Mantener proporción
+                                        allowImageTransform: true, // Activar la transformación real
+                                        imageTransformOutputMimeType: 'image/jpeg', // Forzar JPEG (comprime mejor que PNG)
+                                        imageTransformOutputQuality: 70, // Calidad de compresión (0 a 100). 70 es un buen balance.
+
+                                        server: {
+                                            process: (fieldName, file, metadata, load, error, progress, abort, transfer, options) => {
+                                                @this.upload('photos', file, load, error, progress)
+                                            },
+                                            revert: (uniqueFileId, load, error) => {
+                                                @this.removeUpload('photos', uniqueFileId, load)
+                                            },
+                                        },
+                                    });
+
+                                    // Si Livewire borra las fotos (al guardar), reiniciamos FilePond
+                                    Livewire.on('reservationSaved', () => {
+                                        pond.removeFiles();
+                                    });
+                                "
+                            >
+                            <input type="file" x-ref="input">
                         </div>
-
-                        <div>
-                            <input type="text" wire:model="marca"
-                                placeholder="Marca"
-                                class="w-full border rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500">
-                            @error('marca') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
-                        </div>
-
-                        <div>
-                            <input type="text" wire:model="modelo"
-                                placeholder="Modelo"
-                                class="w-full border rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500">
-                            @error('modelo') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
-                        </div>
-
+                        @error('photos.*') <span class="text-xs text-red-500">{{ $message }}</span> @enderror
                     </div>
                 </div>
 
@@ -68,17 +95,7 @@
                         <h4 class="font-semibold text-gray-700">Seleccion el tipo de Servicio</h4>
                     </div>
 
-                    <select 
-                        wire:model="service_id" 
-                        class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 text-sm text-gray-600 outline-none transition-all"
-                    >
-                            <option value="">Seleccione un servicio...</option>
-                            <option value="1">Lavado Básico - S/. 10.00</option>
-                            <option value="2">Lavado Completo - S/. 20.00</option>
-                            <option value="3">Lavado de Salón - S/. 50.00</option>
-                    </select>
-                    @error('service_id') <span class="text-xs text-red-500">{{ $message }}</span> @enderror
-                </div>
+                  
 
             </div>
 
@@ -96,9 +113,9 @@
                         Cancelar
                     </button>
 
-                    <button wire:click="save"
+                    <button wire:click="processReservation"
                         class="px-5 py-2 text-sm text-white bg-blue-600 rounded-lg hover:bg-blue-700 shadow">
-                        Realizar Reserva
+                        Atender
                     </button>
                 </div>
 
