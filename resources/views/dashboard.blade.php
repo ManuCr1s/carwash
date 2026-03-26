@@ -1,7 +1,12 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Panel Principal') }}
+            @can('ver reserva')
+                {{ __('Mis Reservas') }}
+            @endcan
+            @can('ver reporte')
+                {{ __('Mis Atenciones') }}
+            @endcan
         </h2>
     </x-slot>
 
