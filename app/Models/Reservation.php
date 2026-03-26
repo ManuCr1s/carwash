@@ -6,7 +6,12 @@ use Illuminate\Database\Eloquent\Model;
 
 class Reservation extends Model
 {
-   protected $fillable = [
+    public function vehicle()
+    {
+        return $this->belongsTo(\App\Models\Vehicle::class);
+    }
+
+    protected $fillable = [
         'vehicle_id',
         'user_id',
         'service_id',
