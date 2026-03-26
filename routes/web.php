@@ -6,6 +6,7 @@ use App\Livewire\User\CreateReservation;
 use App\Livewire\User\ResponseRequest;
 use App\Http\Controllers\ProviderController;
 use App\Livewire\Admins\Users;
+use App\Livewire\User\DispatchReservation; 
 
 Route::get('/', function () {
     return view('auth.login');
@@ -19,6 +20,7 @@ Route::middleware(['auth:sanctum',config('jetstream.auth_session'),'verified',])
     Route::post('/register',[UserController::class,'store'])->middleware('role:administrador')->name('user.register');
     Route::get('/booking/new', CreateReservation::class)->middleware('role:cliente')->name('booking.create');
     Route::get('/response/request',ResponseRequest::class)->middleware('role:usuario')->name('response.request');
+    Route::get('/response/dispatch', DispatchReservation::class)->middleware('role:usuario')->name('dispatch.create');
 });
 Route::get('/auth/{provider}', [ProviderController::class,'ProviderRedirect'])->where('provider', 'google|facebook')->name('auth.social.provider');
 Route::get('/auth/{provider}/callback',[ProviderController::class,'ProviderCallback'] );
