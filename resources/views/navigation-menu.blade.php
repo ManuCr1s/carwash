@@ -30,6 +30,11 @@
                         {{ __('Atender') }}
                     </x-nav-link>
                     @endcan
+                    @can('ver despacho')
+                    <x-nav-link href="{{ route('dispatch.create') }}" :active="request()->routeIs('dispatch.create')">
+                        {{ __('Despacho') }}
+                    </x-nav-link>
+                    @endcan
                 </div>
             </div>
 
