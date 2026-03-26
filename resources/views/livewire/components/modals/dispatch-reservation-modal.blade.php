@@ -29,7 +29,7 @@
                                 <circle cx="12" cy="12" r="4" stroke-width="2"/>
                             </svg>
                         </div>
-                        <h4 class="font-semibold text-gray-700">Subir Fotos del Vehiculo antes de lavado</h4>
+                        <h4 class="font-semibold text-gray-700">Subir Fotos del Vehiculo despues de Lavado</h4>
                     </div>
 
                     <div class="grid grid-cols-1 md:grid-cols-1 gap-4">
@@ -113,7 +113,7 @@
                         Cancelar
                     </button>
 
-                    <button wire:click="processReservation"
+                    <button wire:click="processDispatch"
                         class="px-5 py-2 text-sm text-white bg-blue-600 rounded-lg hover:bg-blue-700 shadow">
                         Atender
                     </button>
