@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('order_id')->constrained('orders')->onDelete('cascade');
             $table->string('url_image');
-            $table->boolean('tipo_photo');
+            $table->boolean('type_photo');
             $table->timestamps();
         });
     }
