@@ -35,6 +35,11 @@
                         {{ __('Despacho') }}
                     </x-nav-link>
                     @endcan
+                    @can('ver reporte')
+                    <x-nav-link href="{{ route('report.reservation') }}" :active="request()->routeIs('report.reservation')">
+                        {{ __('Reporte') }}
+                    </x-nav-link>
+                    @endcan
                 </div>
             </div>
 

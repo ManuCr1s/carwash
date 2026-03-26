@@ -21,6 +21,6 @@ class PermissionSeeder extends Seeder
         $user->assignRole(1);*/
         // Permission::create(['name' => 'ver pedido'])->assignRole($rol);
         // Permission::create(['name' => 'editar pedido'])->assignRole($rol);
-        Permission::create(['name' => 'ver despacho'])->assignRole($rol);
+        Permission::create(['name' => 'ver reporte'])->assignRole($rol);
     }
 }
