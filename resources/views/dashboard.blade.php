@@ -1,20 +1,15 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            @can('ver reserva')
-                {{ __('Mis Reservas') }}
-            @endcan
-            @can('ver reporte')
-                {{ __('Mis Atenciones') }}
-            @endcan
+            {{ auth()->user()->dashboard_title }}
         </h2>
     </x-slot>
 
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
-              
-            </div>
+    <div class="flex justify-center mt-5">
+        <div class="w-full max-w-5xl">
+                @can('ver reserva')
+                    <livewire:components.tables.list-reservation-table/>
+                @endcan
         </div>
     </div>
 </x-app-layout>
