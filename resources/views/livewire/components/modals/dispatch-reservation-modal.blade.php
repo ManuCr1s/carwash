@@ -92,9 +92,14 @@
                                 <rect x="4" y="8" width="16" height="8" rx="2" stroke-width="2"/>
                             </svg>
                         </div>
-                        <h4 class="font-semibold text-gray-700">Seleccion el tipo de Servicio</h4>
+                        <h4 class="font-semibold text-gray-700">Ingrese si hay observaciones</h4>
                     </div>
-
+                    <div class="grid grid-cols-1 md:grid-cols-1 gap-4">
+                                <textarea
+                                        class="w-full bg-white/10 backdrop-blur-md border border-gray-300 text-white placeholder:text-xs placeholder-gray-400 rounded-xl p-4 focus:ring-2 focus:ring-purple-400 outline-none"
+                                        placeholder="Escribe aqui tu observacion"
+                                ></textarea>
+                    </div>
                   
 
             </div>

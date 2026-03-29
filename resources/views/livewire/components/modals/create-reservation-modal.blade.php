@@ -73,9 +73,9 @@
                         class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 text-sm text-gray-600 outline-none transition-all"
                     >
                             <option value="">Seleccione un servicio...</option>
-                            <option value="1">Lavado Básico - S/. 10.00</option>
-                            <option value="2">Lavado Completo - S/. 20.00</option>
-                            <option value="3">Lavado de Salón - S/. 50.00</option>
+                            <option value="1">Lavado Básico</option>
+                            <option value="2">Lavado Completo</option>
+                            <option value="3">Lavado de Salón</option>
                     </select>
                     @error('service_id') <span class="text-xs text-red-500">{{ $message }}</span> @enderror
                 </div>
