@@ -84,4 +84,18 @@ class User extends Authenticatable
     {
         return $this->hasMany(\App\Models\Order::class);
     }
+    protected function dashboardTitle(): Attribute
+    {
+    return Attribute::make(
+        get: function () {
+            if ($this->hasRole('administrador')) {
+                return __('Panel de Administración');
+            }
+            if ($this->hasRole('usuario')) {
+                return __('Mi Panel de Atenciones');
+            }
+            return __('Mi Panel de Reservas');
+        },
+    );
+}
 }
