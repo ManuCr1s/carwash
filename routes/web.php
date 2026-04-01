@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\VehicleController;
 use App\Livewire\User\CreateReservation;
 use App\Livewire\User\ResponseRequest;
 use App\Http\Controllers\ProviderController;
@@ -18,12 +19,13 @@ Route::middleware(['auth:sanctum',config('jetstream.auth_session'),'verified',])
     Route::get('/dashboard', function () {
         return view('dashboard');
     })->name('dashboard');
-    Route::get('/register',[UserController::class,'create'])->middleware('role:administrador')->name('user.create');
-    Route::post('/register',[UserController::class,'store'])->middleware('role:administrador')->name('user.register');
-    Route::get('/booking/new', CreateReservation::class)->middleware('role:cliente')->name('booking.create');
-    Route::get('/response/request',ResponseRequest::class)->middleware('role:usuario')->name('response.request');
-    Route::get('/response/dispatch', DispatchReservation::class)->middleware('role:usuario')->name('dispatch.create');
-    Route::get('/response/report', ReportReservation::class)->middleware('role:usuario')->name('report.reservation');
+    Route::get('/register',[UserController::class,'create'])->middleware('role:ADMINISTRADOR')->name('user.create');
+    Route::post('/register',[UserController::class,'store'])->middleware('role:ADMINISTRADOR')->name('user.register');
+    Route::get('/vehicle',[VehicleController::class,'create'])->middleware('role:CLIENTE')->name('vehicle.create');
+    Route::get('/booking/new', CreateReservation::class)->middleware('role:CLIENTE')->name('booking.create');
+    Route::get('/response/request',ResponseRequest::class)->middleware('role:USUARIO')->name('response.request');
+    Route::get('/response/dispatch', DispatchReservation::class)->middleware('role:USUARIO')->name('dispatch.create');
+    Route::get('/response/report', ReportReservation::class)->middleware('role:USUARIO')->name('report.reservation');
     Route::get('/response/{id}/print', [CreatePdfController::class, 'print'])->name('reservation.print');
 });
 Route::get('/auth/{provider}', [ProviderController::class,'ProviderRedirect'])->where('provider', 'google|facebook')->name('auth.social.provider');
