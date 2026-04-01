@@ -18,6 +18,7 @@ return new class extends Migration
             $table->dateTime('date_init',0)->nullable();
             $table->dateTime('date_end',0)->nullable();
             $table->string('observations')->nullable();
+            $table->decimal('price',12,2);
             $table->timestamps();
         });
     }

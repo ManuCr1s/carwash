@@ -12,10 +12,11 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('services', function (Blueprint $table) {
-            $table->id();
+            $table->id();   
             $table->string('name');
             $table->string('description')->nullable();
-            $table->decimal('price',12,2);
+            $table->unsignedBigInteger('group_id');
+            $table->boolean('status')->default(true);
             $table->timestamps();
         });
     }
