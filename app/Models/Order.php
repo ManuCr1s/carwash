@@ -13,6 +13,7 @@ class Order extends Model
         'date_init',
         'date_end',
         'observations',
+        'price'
     ];
     public function user()
     {
