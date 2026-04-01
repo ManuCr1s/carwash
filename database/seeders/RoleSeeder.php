@@ -28,6 +28,10 @@ class RoleSeeder extends Seeder
         Permission::create(['name' => 'eliminar usuario'])->assignRole($admin);
         Permission::create(['name' => 'ver usuario'])->assignRole($admin);
 
+        Permission::create(['name' => 'ver pedido'])->assignRole($usuario);
+        Permission::create(['name' => 'editar pedido'])->assignRole($usuario);
+        Permission::create(['name' => 'ver reporte'])->assignRole($usuario); 
 
+        Permission::create(['name' => 'ver vehiculo'])->assignRole($cliente);
     }
 }
