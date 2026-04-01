@@ -20,6 +20,11 @@
                         {{ __('Reservas') }}
                     </x-nav-link>
                     @endcan
+                    @can('ver vehiculo')
+                    <x-nav-link href="{{ route('vehicle.create') }}" :active="request()->routeIs('vehicle.create')">
+                        {{ __('Vehiculos') }}
+                    </x-nav-link>
+                    @endcan
                     @can('ver usuario')
                     <x-nav-link href="{{ route('user.create') }}" :active="request()->routeIs('user.create')">
                         {{ __('Usuarios') }}

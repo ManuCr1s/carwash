@@ -57,29 +57,6 @@
 
                     </div>
                 </div>
-
-                <div>
-                    <div class="flex items-center gap-2 mb-4">
-                        <div class="w-8 h-8 bg-[#0f1a26] rounded-full flex items-center justify-center text-[#e6b84a]">
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <rect x="4" y="8" width="16" height="8" rx="2" stroke-width="2"/>
-                            </svg>
-                        </div>
-                        <h4 class="font-semibold text-gray-700">Seleccion el tipo de Servicio</h4>
-                    </div>
-
-                    <select 
-                        wire:model="service_id" 
-                        class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 text-sm text-gray-600 outline-none transition-all"
-                    >
-                            <option value="">Seleccione un servicio...</option>
-                            <option value="1">Lavado Básico</option>
-                            <option value="2">Lavado Completo</option>
-                            <option value="3">Lavado de Salón</option>
-                    </select>
-                    @error('service_id') <span class="text-xs text-red-500">{{ $message }}</span> @enderror
-                </div>
-
             </div>
 
             <!-- FOOTER -->
