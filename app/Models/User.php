@@ -88,10 +88,10 @@ class User extends Authenticatable
     {
     return Attribute::make(
         get: function () {
-            if ($this->hasRole('administrador')) {
+            if ($this->hasRole('ADMINISTRADOR')) {
                 return __('Panel de Administración');
             }
-            if ($this->hasRole('usuario')) {
+            if ($this->hasRole('USUARIO')) {
                 return __('Mi Panel de Atenciones');
             }
             return __('Mi Panel de Reservas');

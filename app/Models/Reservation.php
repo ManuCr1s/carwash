@@ -3,6 +3,9 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Vehicle;
+use App\Models\Service;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Reservation extends Model
 {
@@ -12,9 +15,12 @@ class Reservation extends Model
     }
     public function vehicle()
     {
-        return $this->belongsTo(\App\Models\Vehicle::class);
+        return $this->belongsTo(Vehicle::class);
     }
-
+    public function service(): BelongsTo
+    {
+        return $this->belongsTo(Service::class);
+    }
     protected $fillable = [
         'vehicle_id',
         'user_id',
