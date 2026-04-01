@@ -5,6 +5,7 @@ namespace App\Livewire\User;
 use Livewire\Component;
 use Carbon\Carbon;
 use App\Models\Reservation;
+use App\Models\Service;
 use Livewire\Attributes\On;
 
 class CreateReservation extends Component
@@ -19,16 +20,39 @@ class CreateReservation extends Component
         '11:00', '12:00', '13:00',
         '14:00', '15:00', '16:00'
     ];
+    public $service_id = null;
+    
     public function getOccupiedSlotsProperty()
     {
-        return Reservation::where('date_reservation', $this->selectedDate)
-            ->pluck('time_reservation')
+        if (!$this->service_id) {
+            return [];
+        }
+        $servicioActual = Service::find($this->service_id);
+        $reservasDelDia = Reservation::where('date_reservation', $this->selectedDate)
+        ->whereHas('service', function($q) use ($servicioActual) {
+            $q->where('group_id', $servicioActual->group_id);
+        })
+        ->get();
+
+        if ($servicioActual->group_id == 2 && $reservasDelDia->count() > 0) {
+            return $this->slots; 
+        }
+
+        return $reservasDelDia->pluck('time_reservation')
             ->map(fn($time) => substr($time, 0, 5))
             ->toArray();
+    /*     return Reservation::where('date_reservation', $this->selectedDate)
+            ->whereHas('service', function($q) use ($servicioActual) {
+                    $q->where('group_id', $servicioActual->group_id);
+                })
+            ->pluck('time_reservation')
+            ->map(fn($time) => substr($time, 0, 5))
+            ->toArray(); */
     }
+    
     #[On('reservationCreated')]
-    public function refreshComponent()
-    {}
+    public function refreshComponent(){}
+
     public function mount(){
         $this->year = $this->year ?? now()->year;
         $this->month = $this->month ?? now()->month;
@@ -36,6 +60,7 @@ class CreateReservation extends Component
         $this->selectedDate = now()->format('Y-m-d');
         $this->calculateWeek();
     }
+
     public function isSlotPast($slot,$columnDate)
     {
         $date = \Carbon\Carbon::parse($columnDate);
@@ -48,6 +73,7 @@ class CreateReservation extends Component
         $slotTime = \Carbon\Carbon::createFromFormat('H:i', $slot);
         return now()->greaterThanOrEqualTo($slotTime);
     }
+
     public function selectDate($date,$time = null){
         if (Carbon::parse($date)->isPast() && !Carbon::parse($date)->isToday()) {
             $this->dispatch('error-mensaje', message: 'No puedes seleccionar una fecha pasada.');
@@ -67,6 +93,7 @@ class CreateReservation extends Component
         }
         
     }
+
     public function calculateWeek()
     {
         $startOfWeek = Carbon::parse($this->selectedDate)->startOfWeek(Carbon::MONDAY);
@@ -76,6 +103,7 @@ class CreateReservation extends Component
             $this->weekDays[] = $startOfWeek->copy()->addDays($i);
         }
     }
+
     private function generateCalendar(Carbon $date)
     {
         $start = $date->copy()->startOfMonth()->startOfWeek(Carbon::MONDAY);
@@ -94,6 +122,7 @@ class CreateReservation extends Component
         }
         return $days;
     }
+
     public function confirmBooking(){
         if (Carbon::parse($this->selectedDate)->isPast() && !Carbon::parse($this->selectedDate)->isToday()) {
             session()->flash('error', 'No puedes reservar en una fecha pasada.');
@@ -101,29 +130,37 @@ class CreateReservation extends Component
         }
         
     }
+
     public function nextMonth()
     {
         $date = Carbon::createFromDate($this->year, $this->month, 1)->addMonth();
         $this->year = $date->year;
         $this->month = $date->month;
     }
+
     public function previousMonth()
     {
         $date = Carbon::createFromDate($this->year, $this->month, 1)->subMonth();
         $this->year = $date->year;
         $this->month = $date->month;
     }
+
     public function render()
     {
+       /*  $esSalon = $this->service_id && str_contains(strtolower(Service::find($this->service_id)?->name), 'salon'); */
+        $esSalon = Service::find($this->service_id);
+        $slotsFiltrados = collect($this->slots)->filter(function($slot) use ($esSalon) {
+            if ($esSalon && $esSalon->group_id == 2) return $slot <= '10:00'; // Solo mañana para salón
+            return true; 
+        });
         $currentDate = \Carbon\Carbon::createFromDate($this->year, $this->month, 1);
         $reservations = Reservation::orderBy('time_reservation')->orderBy('time_reservation')->get();
         return view('livewire.user.create-reservation',[
             'days' => $this->generateCalendar($currentDate),
-            'monthName' => $currentDate->translatedFormat('F Y')
+            'monthName' => $currentDate->translatedFormat('F Y'),
+            'services' => Service::select('id','name','description')->get(),
+            'availableSlots' => $slotsFiltrados
         ])->layout('layouts.app');
     }
- /*   public function render()
-    {
-        return view('livewire.user.create-reservation')->layout('layouts.app');
-    }*/
+
 }

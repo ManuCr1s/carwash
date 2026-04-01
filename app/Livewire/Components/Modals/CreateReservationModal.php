@@ -29,7 +29,6 @@ class CreateReservationModal extends Component
             'placa' => 'required|min:6',
             'modelo' => 'required',
             'marca' => 'required',
-            'service_id' => 'required',
             'date_reservation'  => 'required|date|after_or_equal:today',
             'time_reservation' => [
                 'required',
@@ -50,8 +49,6 @@ class CreateReservationModal extends Component
             'marca.required' => 'La marca es obligatoria',
             'modelo.required' => 'El modelo es obligatorio',
 
-            'service_id.required' => 'Debe seleccionar un servicio',
-
             'date_reservation.required' => 'La fecha es obligatoria',
             'date_reservation.after_or_equal' => 'La fecha debe ser hoy o posterior',
 
@@ -60,11 +57,12 @@ class CreateReservationModal extends Component
         ];
     }
     #[On('openReservationModal')]
-    public function open($date = null, $slot = null)
+    public function open($date = null, $slot = null, $service_id=null)
     {
         if ($date) {
             $this->date_reservation = $date?? null;
             $this->time_reservation = $slot?? null;
+            $this->service_id = $service_id?? null;
         }
 
         $this->show = true;
