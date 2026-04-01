@@ -14,12 +14,12 @@ class ServiceSeeder extends Seeder
     public function run(): void
     {
         DB::table('services')->insert([
-            ['id' => 1, 'name' => 'Lavado Express', 'description' => 'Lavado exterior, silicona de llantas', 'group_id' => 1],
-            ['id' => 2, 'name' => 'Lavado Standard', 'description' => 'Lavado express, limpieza Interior, Aspirado, Silicona Tableros', 'group_id' =>1],
-            ['id' => 3, 'name' => 'Lavado Deluxe', 'description' => 'Lavado standard, encerado', 'group_id' =>1],
-            ['id' => 4, 'name' => 'Lavado Ahorasi', 'description' => 'Lavado Deluxe, lavado de techo, lavado de motor', 'group_id' =>1],
-            ['id' => 5, 'name' => 'Lavado Salon Standard', 'description' => 'Lavado Deluxe, puertas, cinturones, aros, alfombras, pisos, detallado interior', 'group_id' => 2], 
-            ['id' => 6, 'name' => 'Lavado Salon Ahorasi', 'description' => 'Lavado Salon Standard, retirado de asientos', 'group_id' => 2],
+            ['id' => 1, 'name' => 'Lavado Express', 'description' => 'Lavado exterior, silicona de llantas', 'group_id' => 1, 'duration' => 1.00],
+            ['id' => 2, 'name' => 'Lavado Standard', 'description' => 'Lavado express, limpieza Interior, Aspirado, Silicona Tableros', 'group_id' =>1, 'duration' => 1.00],
+            ['id' => 3, 'name' => 'Lavado Deluxe', 'description' => 'Lavado standard, encerado', 'group_id' =>1, 'duration' => 2.00],
+            ['id' => 4, 'name' => 'Lavado Ahorasi', 'description' => 'Lavado Deluxe, lavado de techo, lavado de motor', 'group_id' =>1, 'duration' => 3.00],
+            ['id' => 5, 'name' => 'Lavado Salon Standard', 'description' => 'Lavado Deluxe, puertas, cinturones, aros, alfombras, pisos, detallado interior', 'group_id' => 2, 'duration' => 24.00], 
+            ['id' => 6, 'name' => 'Lavado Salon Ahorasi', 'description' => 'Lavado Salon Standard, retirado de asientos', 'group_id' => 2, 'duration' => 24.00],
         ]);
     }
 }
