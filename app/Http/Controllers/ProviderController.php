@@ -31,7 +31,7 @@ class ProviderController extends Controller
                         'profile_photo_path' => $googleUser->avatar,
                     ]);
                     if($user->roles()->count() == 0){
-                        $user->assignRole('cliente');
+                        $user->assignRole('CLIENTE');
                     }
                     Auth::login($user,true);
                     request()->session()->regenerate();
