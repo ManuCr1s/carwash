@@ -9,6 +9,6 @@ class Photo extends Model
     protected $fillable = [
         'order_id',
         'url_image',
-        'tipo_photo',
+        'type_photo',
     ];
 }
