@@ -38,7 +38,7 @@
     <div class="mb-8">
         <h3 class="text-xs font-black text-blue-900 uppercase mb-3 border-b pb-1">📸 Inspección Inicial (Antes)</h3>
         <div class="grid grid-cols-3 gap-3">
-            @foreach($reservation->order->photos->where('tipo_photo', 1) as $photo)
+            @foreach($reservation->order->photos->where('type_photo', 1) as $photo)
                 <div class="rounded-lg overflow-hidden border-2 border-gray-100">
                     <img src="{{ public_path('storage/' . $photo->url_image) }}" class="w-full h-48 object-cover">
                 </div>
@@ -49,7 +49,7 @@
     <div class="mb-8">
         <h3 class="text-xs font-black text-green-800 uppercase mb-3 border-b pb-1">✨ Entrega Final (Después)</h3>
         <div class="grid grid-cols-3 gap-3">
-            @foreach($reservation->order->photos->where('tipo_photo', 0) as $photo)
+            @foreach($reservation->order->photos->where('type_photo', 0) as $photo)
                 <div class="rounded-lg overflow-hidden border-2 border-gray-100">
                     <img src="{{ public_path('storage/' . $photo->url_image) }}" class="w-full h-48 object-cover">
                 </div>
