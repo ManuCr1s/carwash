@@ -13,7 +13,7 @@ class CreatePdfController extends Controller
 {
     public function print($id)
         {
-            $reservation = Reservation::with(['vehicle', 'order.photos'])->findOrFail($id);
+            $reservation = Reservation::with(['user','vehicle.model.brand','service','order.photos'])->findOrFail($id);
             $order = $reservation->order;
 
             return Pdf::view('pdf.report', [

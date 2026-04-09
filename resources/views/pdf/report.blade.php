@@ -16,22 +16,22 @@
         </div>
         <div class="text-right">
             <h2 class="text-lg font-bold text-gray-600">ORDEN DE LAVADO</h2>
-            <p class="text-xl font-black text-blue-900">N° 001234</p>
+            <p class="text-xl font-black text-blue-900">N° {{$order->id ?? 'AUN NO REGISTRADO'}}</p>
         </div>
     </div>
 
     <div class="grid grid-cols-2 gap-8 mb-8 border-y-2 py-6 border-gray-100">
         <div class="space-y-1">
             <h3 class="text-[11px] font-bold text-gray-400 uppercase tracking-widest mb-2">Información del Cliente</h3>
-            <p class="text-md"><strong>NOMBRE:</strong> Juan Alberto Pérez Gómez</p>
-            <p class="text-md text-gray-700"><strong>DNI/RUC:</strong> 45678912</p>
-            <p class="text-md text-gray-700"><strong>TELÉFONO:</strong> 987 654 321</p>
+            <p class="text-md"><strong>NOMBRE:</strong> {{$reservation->user->name ?? 'AUN NO REGISTRADO'}}</p>
+            <p class="text-md text-gray-700"><strong>DNI/RUC:</strong> {{ $reservation->user->dni ??  'AUN NO REGISTRADO'}}</p>
+            <p class="text-md text-gray-700"><strong>TELÉFONO:</strong> {{ $reservation->user->dni ??  'AUN NO REGISTRADO'}}</p>
         </div>
         <div class="space-y-1 text-right border-l pl-8 border-gray-100">
             <h3 class="text-[11px] font-bold text-gray-400 uppercase tracking-widest mb-2">Detalles del Vehículo</h3>
-            <p class="text-md"><strong>VEHÍCULO:</strong> Toyota Corolla Cross</p>
-            <p class="text-md text-gray-700"><strong>PLACA:</strong> <span class="font-black text-blue-900">ABC-123</span></p>
-            <p class="text-md font-bold text-blue-700 uppercase">Lavado Premium</p>
+            <p class="text-md"><strong>VEHÍCULO:</strong>  {{$reservation->vehicle->model->brand->name ?? 'AUN NO REGISTRADO' }} - {{$reservation->vehicle->model->name ?? 'AUN NO REGISTRADO'}}</p>
+            <p class="text-md text-gray-700"><strong>PLACA:</strong> <span class="font-black text-blue-900">{{$reservation->vehicle->placa ?? 'AUN NO REGISTRADO'}}</span></p>
+            <p class="text-md font-bold text-blue-700 uppercase">{{ $reservation->service?->name ?? 'AUN NO REGISTRADO' }}</p>
         </div>
     </div>
 
@@ -60,10 +60,10 @@
     <div class="mt-auto">
         <div class="flex justify-between items-center bg-gray-50 p-4 rounded-xl mb-6">
             <p class="text-[9px] text-gray-500 w-2/3 leading-tight">
-                * AquaSpark Auto Spa se compromete a realizar un servicio de calidad. No nos responsabilizamos por objetos de valor o fallas mecánicas ajenas al servicio.
+                * AhoraSi Auto Spa se compromete a realizar un servicio de calidad. No nos responsabilizamos por objetos de valor o fallas mecánicas ajenas al servicio.
             </p>
             <div class="text-right">
-                <p class="text-2xl font-black text-[#003366]">TOTAL: S/. 85.00</p>
+                <p class="text-2xl font-black text-[#003366]">TOTAL: S/. {{$order->price ?? 'AUN NO REGISTRADO'}}</p>
             </div>
         </div>
 
@@ -72,13 +72,13 @@
                 <p class="text-[10px] font-black uppercase">Firma del Cliente</p>
             </div>
             <div class="text-right text-[10px] font-bold">
-                FECHA: 24 / 05 / 2024
+                FECHA: {{ \Carbon\Carbon::now()->format('d / m / Y') }}
             </div>
         </div>
     </div>
 
     <div class="absolute bottom-6 left-0 right-0 text-center text-[9px] text-gray-400">
-        RUC: 20601234567 - Av. Los Incas 450, Lima - www.aquaspark.pe
+        RUC: 20601234567 - Av. Los Incas 450, Pasco - www.ahorasi.pe
     </div>
 
 </body>
