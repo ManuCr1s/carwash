@@ -9,6 +9,7 @@ use App\Http\Controllers\ProviderController;
 use App\Livewire\Admins\Users;
 use App\Livewire\User\DispatchReservation; 
 use App\Livewire\User\ReportReservation;
+use App\Livewire\User\CreateUser;
 use App\Http\Controllers\CreatePdfController;
 
 Route::get('/', function () {
@@ -19,8 +20,7 @@ Route::middleware(['auth:sanctum',config('jetstream.auth_session'),'verified',])
     Route::get('/dashboard', function () {
         return view('dashboard');
     })->name('dashboard');
-    Route::get('/register',[UserController::class,'create'])->middleware('role:ADMINISTRADOR')->name('user.create');
-    Route::post('/register',[UserController::class,'store'])->middleware('role:ADMINISTRADOR')->name('user.register');
+    Route::get('/user',CreateUser::class)->middleware('role:ADMINISTRADOR')->name('create.user');
     Route::get('/vehicle',[VehicleController::class,'create'])->middleware('role:CLIENTE')->name('vehicle.create');
     Route::get('/booking/new', CreateReservation::class)->middleware('role:CLIENTE')->name('booking.create');
     Route::get('/response/request',ResponseRequest::class)->middleware('role:USUARIO')->name('response.request');
