@@ -84,6 +84,10 @@ class User extends Authenticatable
     {
         return $this->hasMany(\App\Models\Order::class);
     }
+    public function reservations()
+    {
+        return $this->hasMany(\App\Models\Reservation::class);
+    }
     protected function dashboardTitle(): Attribute
     {
     return Attribute::make(

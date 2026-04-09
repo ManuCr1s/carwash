@@ -9,6 +9,10 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Reservation extends Model
 {
+    public function user()
+    {
+        return $this->belongsTo(\App\Models\User::class);
+    }
     public function order()
     {
         return $this->hasOne(Order::class, 'reserva_id');
