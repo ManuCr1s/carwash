@@ -17,12 +17,12 @@
                     </x-nav-link>
                     @can('ver reserva')
                     <x-nav-link href="{{ route('booking.create') }}" :active="request()->routeIs('booking.create')">
-                        {{ __('Reservas') }}
+                        {{ __('Realizar Reservas') }}
                     </x-nav-link>
                     @endcan
                     @can('ver vehiculo')
                     <x-nav-link href="{{ route('vehicle.create') }}" :active="request()->routeIs('vehicle.create')">
-                        {{ __('Vehiculos') }}
+                        {{ __('Mis Vehiculos') }}
                     </x-nav-link>
                     @endcan
                     @can('ver usuario')
