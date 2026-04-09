@@ -32,56 +32,43 @@
                         <h4 class="font-semibold text-gray-700">Subir Fotos del Vehiculo despues de Lavado</h4>
                     </div>
 
-                    <div class="grid grid-cols-1 md:grid-cols-1 gap-4">
-                        <div wire:ignore
-                            x-data="{ pond: null }"
-                            x-init="
-                                    FilePond.setOptions({
-                                        // Configuración Global de etiquetas en ESPAÑOL
-                                        labelIdle: 'Arrastra las fotos del vehículo o <span class=\'filepond--label-action\'>Busca</span>',
-                                        labelMaxFilesExceeded: 'Solo puedes subir 3 fotos',
-                                        labelFileTypeNotAllowed: 'Formato de archivo inválido',
-                                        fileValidateTypeDetectType: (source, type) => new Promise((resolve, reject) => {
-                                            resolve(type);
-                                        })
-                                    });
-
-                                    pond = FilePond.create($refs.input, {
-                                        // --- LIMITACIÓN ---
-                                        allowMultiple: true,
-                                        maxFiles: 3,
-                                        required: true, // No deja enviar si no hay 3 fotos
-
-                                        // --- VALIDACIÓN ---
-                                        acceptedFileTypes: ['image/jpeg', 'image/png'],
-
-                                        // --- COMPRESIÓN Y REDIMENSIONADO ---
-                                        allowImageResize: true,
-                                        imageResizeTargetWidth: 800, // Ancho máximo
-                                        imageResizeMode: 'contain', // Mantener proporción
-                                        allowImageTransform: true, // Activar la transformación real
-                                        imageTransformOutputMimeType: 'image/jpeg', // Forzar JPEG (comprime mejor que PNG)
-                                        imageTransformOutputQuality: 70, // Calidad de compresión (0 a 100). 70 es un buen balance.
-
-                                        server: {
-                                            process: (fieldName, file, metadata, load, error, progress, abort, transfer, options) => {
-                                                @this.upload('photos', file, load, error, progress)
-                                            },
-                                            revert: (uniqueFileId, load, error) => {
-                                                @this.removeUpload('photos', uniqueFileId, load)
-                                            },
-                                        },
-                                    });
-
-                                    // Si Livewire borra las fotos (al guardar), reiniciamos FilePond
-                                    Livewire.on('reservationSaved', () => {
-                                        pond.removeFiles();
-                                    });
-                                "
-                            >
-                            <input type="file" x-ref="input">
-                        </div>
-                        @error('photos.*') <span class="text-xs text-red-500">{{ $message }}</span> @enderror
+                    <div class="grid grid-cols-2 md:grid-cols-2 gap-4">
+                        @for ($i = 1; $i <= 6; $i++)
+                            <div class="flex flex-col">
+                                <label class="text-[10px] font-bold mb-1 text-gray-600">FOTO {{ $i }}</label>
+                                <div 
+                                    wire:ignore 
+                                    x-data 
+                                    x-init="
+                                            FilePond.create($refs.input{{ $i }}, {
+                                                labelIdle: `<span class='text-xs'>Tocar para Foto</span>`,
+                                                imagePreviewHeight: 80,
+                                                circleButtonRemoveItem: true,
+                                                credits: false, {{-- Esto quita el texto de 'Powered by FilePond' --}}
+                                                captureMethod: 'camera',
+                                                server: {
+                                                    process: (fieldName, file, metadata, load, error, progress, abort, transfer, options) => {
+                                                        @this.upload('photo{{ $i }}', file, load, error, progress)
+                                                    },
+                                                    revert: (uniqueFileId, load, error) => {
+                                                        @this.removeUpload('photo{{ $i }}', uniqueFileId, load, error)
+                                                    },
+                                                },
+                                            });
+                                            
+                                            {{-- Escuchamos el evento para limpiar FilePond al abrir el modal --}}
+                                            window.addEventListener('init-filepond', event => {
+                                                if (window.FilePond.find(document.querySelector('input[x-ref=\'input{{ $i }}\']'))) {
+                                                    window.FilePond.find(document.querySelector('input[x-ref=\'input{{ $i }}\']')).removeFiles();
+                                                }
+                                            });
+                                        "
+                                >
+                                    <input type="file" x-ref="input{{ $i }}">
+                                </div>
+                                @error('photo' . $i) <span class="text-red-500 text-[10px]">{{ $message }}</span> @enderror
+                            </div>
+                        @endfor
                     </div>
                 </div>
 
@@ -96,9 +83,13 @@
                     </div>
                     <div class="grid grid-cols-1 md:grid-cols-1 gap-4">
                                 <textarea
+                                        wire.model='observations'
                                         class="w-full bg-white/10 backdrop-blur-md border border-gray-300 text-white placeholder:text-xs placeholder-gray-400 rounded-xl p-4 focus:ring-2 focus:ring-purple-400 outline-none"
                                         placeholder="Escribe aqui tu observacion"
                                 ></textarea>
+                                 @error('observations')
+                                        <span class="text-red-500 text-xs mt-1">{{ $message }}</span>
+                                @enderror
                     </div>
                   
 

@@ -14,25 +14,44 @@ class DispatchReservationModal extends Component
     use WithFileUploads;
     public bool $show = false;
     public $reservaId;
-    public $photos = [];
+    public $date_init;
+    public $price;
+    //Slots nuevo para las 6 fotos
+    public $photo1, $photo2, $photo3, $photo4, $photo5, $photo6, $observations;
     #[On('openDispatchModal')]
     public function openDispatchModal($id)
     {
         $this->reservaId = $id;
 
+        $this->reset(['photo1', 'photo2', 'photo3', 'photo4', 'photo5', 'photo6']);
+
         $this->dispatch('init-filepond');   
          
         $this->show   = true;
     }
-    public function processDispatch(){
+    protected function rules(): array
+    {
+        return [
+            'observations' => 'max:255',
+            'photo1' => 'required|image|max:2048',
+        ];
+    }
+    protected function messages(): array
+    {
+        return [
+            'observations.max' => 'Las observaciones no deben superar los 255 caracteres.',
+
+            'photo1.required' => 'Debe subir una imagen.',
+            'photo1.image' => 'El archivo debe ser una imagen válida (jpg, png, etc).',
+            'photo1.max' => 'La imagen no debe superar los 2MB.',
+        ];
+    }
+    public function processDispatch()
+    {
+        $this->validate();
         try {
-            $photoPaths = [];
-            foreach ($this->photos as $photo) {
-                $path = $photo->store('carwash/reservas/' . $this->reservaId, 'public');
-                $photoPaths[] = $path;
-            }
-            $user = auth()->user();
-            DB::transaction(function () use ($user, $photoPaths) {
+            DB::transaction(function () {
+                $user = auth()->user();
                 $reservation = Reservation::findOrFail($this->reservaId);
                 $order = $user->orders()
                         ->where('reserva_id', $this->reservaId)
@@ -50,27 +69,33 @@ class DispatchReservationModal extends Component
                     ]);
                     return;
                 }
-                foreach ($photoPaths as $path) {
-                    $order->photos()->create([
-                        'url_image'  => $path,
-                        'tipo_photo' => false,
-                    ]);
+                // 2. Procesar las 6 fotos
+                for ($i = 1; $i <= 6; $i++) {
+                    $property = "photo$i";
+                    if ($this->$property) {
+                        $path = $this->$property->store('carwash/reservas/' . $this->reservaId, 'public');
+                        
+                        $order->photos()->create([
+                            'url_image'  => $path,
+                            'type_photo' => false, // Despues del lavado
+                        ]);
+                    }
                 }
-                $reservation->update([
-                    'state_id' => 3 
-                ]);
+
+                // 3. Actualizar estado de reserva
+                $reservation->update(['state_id' => 3]);
             });
+
             $this->show = false;
-            $this->photos = [];
-            // Evento para limpiar FilePond en JS
             $this->dispatch('tableRefresh');
             $this->dispatch('swal', [
                 'title' => '¡Completado!',
-                'text' => 'La reserva ha sido atendida con éxito.',
+                'text' => 'Vehículo complicado, ¡Para su despacho!',
                 'icon' => 'success'
             ]);
+
         } catch (\Exception $e) {
-            dd($e->getMessage());
+            $this->dispatch('swal', ['title' => 'Error', 'text' => $e->getMessage(), 'icon' => 'error']);
         }
     }
     public function render()
