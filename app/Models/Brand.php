@@ -4,11 +4,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Vehicle extends Model
+class Brand extends Model
 {
     protected $fillable = [
-        'user_id',
-        'model_id',
-        'placa',
+        'name',
     ];
 }
