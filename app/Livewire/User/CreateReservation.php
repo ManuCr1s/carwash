@@ -21,13 +21,26 @@ class CreateReservation extends Component
         '14:00', '15:00', '16:00'
     ];
     public $service_id = null;
-    
+    protected $cachedService = null;
+
+    public function getServicioActualProperty()
+    {
+        if (!$this->service_id) return null;
+
+        if (!$this->cachedService) {
+            $this->cachedService = Service::find($this->service_id);
+        }
+
+        return $this->cachedService;
+    }
     public function getOccupiedSlotsProperty()
     {
-        if (!$this->service_id) {
+       /*  if (!$this->service_id) {
             return [];
         }
-        $servicioActual = Service::find($this->service_id);
+        $servicioActual = Service::find($this->service_id); */
+        $servicioActual = $this->servicioActual;
+        if (!$servicioActual) return [];
         $reservasDelDia = Reservation::where('date_reservation', $this->selectedDate)
         ->whereHas('service', function($q) use ($servicioActual) {
             $q->where('group_id', $servicioActual->group_id);
@@ -49,7 +62,54 @@ class CreateReservation extends Component
             ->map(fn($time) => substr($time, 0, 5))
             ->toArray(); */
     }
-    
+    public function getFinalSlotsProperty()
+    {
+        $servicio = $this->servicioActual; // Misma consulta que arriba
+        if (!$servicio) return [];
+
+        $occupied = $this->occupiedSlots; 
+        $duracionNeeded = (int) ceil($servicio->duration);
+        
+        // Filtro por Grupo 2 (Salón)
+        $slotsBase = collect($this->slots)->filter(function($slot) use ($servicio) {
+            if ($servicio->group_id == 2) return $slot <= '10:00';
+            return true;
+        });
+
+        return $slotsBase->map(function($slot, $index) use ($occupied, $duracionNeeded, $servicio) {
+            $isPast = $this->isSlotPast($slot, $this->selectedDate);
+            $isOccupied = in_array($slot, $occupied);
+            
+            $tieneEspacio = true;
+
+            // --- LÓGICA DE BLOQUEO DIFERENCIADA ---
+            
+            if ($servicio->group_id == 2) {
+                // Para SALÓN: Si ya hay algo ocupado hoy (tu occupiedSlots ya trae todos los slots),
+                // no hay espacio. Aquí no importa la "duración" horaria, sino la disponibilidad diaria.
+                if ($isOccupied) $tieneEspacio = false;
+            } else {
+                // Para LAVADOS: Lógica de bloques continuos (1, 2, 3 horas)
+                if (!$isOccupied && !$isPast && $duracionNeeded > 1) {
+                    for ($i = 1; $i < $duracionNeeded; $i++) {
+                        $nextSlotTime = \Carbon\Carbon::parse($slot)->addHours($i)->format('H:i');
+                        if (!in_array($nextSlotTime, $this->slots) || in_array($nextSlotTime, $occupied)) {
+                            $tieneEspacio = false;
+                            break;
+                        }
+                    }
+                }
+            }
+
+            return (object) [
+                'hour' => $slot,
+                'is_past' => $isPast,
+                'is_occupied' => $isOccupied,
+                'has_space' => $tieneEspacio,
+                'can_reserve' => !$isPast && !$isOccupied && $tieneEspacio
+            ];
+        });
+    }
     #[On('reservationCreated')]
     public function refreshComponent(){}
 
@@ -144,7 +204,6 @@ class CreateReservation extends Component
         $this->year = $date->year;
         $this->month = $date->month;
     }
-
     public function render()
     {
        /*  $esSalon = $this->service_id && str_contains(strtolower(Service::find($this->service_id)?->name), 'salon'); */
@@ -159,7 +218,7 @@ class CreateReservation extends Component
             'days' => $this->generateCalendar($currentDate),
             'monthName' => $currentDate->translatedFormat('F Y'),
             'services' => Service::select('id','name','description')->get(),
-            'availableSlots' => $slotsFiltrados
+            'availableSlots' => $this->finalSlots
         ])->layout('layouts.app');
     }
 

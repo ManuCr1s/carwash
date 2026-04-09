@@ -124,36 +124,42 @@
                     <!-- Horarios -->
                     <div class="w-full space-y-3">
                         @foreach($availableSlots as $slot)
-                            @php
-                                $isPast = $this->isSlotPast($slot, $selectedDate);
-                                $isOccupied = in_array($slot, $this->occupiedSlots);
-                            @endphp
-
                             <button 
+                                type="button"
                                 wire:click="$dispatch('openReservationModal', {
                                     date: '{{ $selectedDate }}',
-                                    slot: '{{ $slot }}',
+                                    slot: '{{ $slot->hour }}',
                                     service_id: {{ $service_id }}
                                 })"
-                                @disabled($isPast || $isOccupied)
+                                {{-- Usamos la propiedad can_reserve que calculamos en el componente --}}
+                                @disabled(!$slot->can_reserve)
+                                
                                 @class([
-                                    'w-full py-2 px-1 border rounded text-sm font-semibold transition-all',
+                                    'w-full py-2 px-1 border rounded text-sm font-semibold transition-all relative group',
 
-                                    // 🔴 Ocupado
-                                    'bg-red-100 text-red-400 border-red-200 cursor-not-allowed' => $isOccupied,
+                                    // 🔵 DISPONIBLE: Estética Premium AquaSpark
+                                    'border-blue-200 text-blue-600 hover:bg-blue-600 hover:text-white hover:shadow-md' => $slot->can_reserve,
 
-                                    // ⚫ Pasado
-                                    'bg-gray-100 text-gray-400 border-gray-200 cursor-not-allowed opacity-50' => $isPast,
+                                    // 🔴 OCUPADO o SIN ESPACIO (Diferenciado visualmente)
+                                    'bg-red-50 text-red-400 border-red-200 cursor-not-allowed' => !$slot->can_reserve && !$slot->is_past,
 
-                                    // 🔵 Disponible
-                                    'border-blue-100 text-blue-600 hover:bg-blue-600 hover:text-white' => !$isPast && !$isOccupied,
+                                    // ⚫ PASADO
+                                    'bg-gray-100 text-gray-400 border-gray-200 cursor-not-allowed opacity-50' => $slot->is_past,
                                 ])
                             >
-                                {{ $slot }}
+                                {{ $slot->hour }}
 
-                                @if($isOccupied)
-                                    <span class="block text-xs">Ocupado</span>
-                                @endif
+                                <span class="block text-[9px] uppercase font-bold">
+                                    @if($slot->is_past) 
+                                        Pasado
+                                    @elseif($slot->is_occupied) 
+                                        Ocupado
+                                    @elseif(!$slot->has_space) 
+                                        Sin tiempo {{-- Aquí es donde entra tu nueva lógica de duración --}}
+                                    @else 
+                                        Libre
+                                    @endif
+                                </span>
                             </button>
                         @endforeach
                     </div>

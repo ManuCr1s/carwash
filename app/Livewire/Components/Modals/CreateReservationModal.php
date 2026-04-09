@@ -9,6 +9,8 @@ use App\Models\Service;
 use App\Models\State;
 use Livewire\Attributes\On;
 use Illuminate\Validation\Rule;
+use App\Models\Brand;
+use App\Models\Models;
 
 class CreateReservationModal extends Component
 {
@@ -17,12 +19,60 @@ class CreateReservationModal extends Component
     public $placa;
     public $marca;
     public $modelo;
+    public $marca_id = null; 
+    public $modelo_id = null;
+    public $resultadosMarca = [];
+    public $resultadosModelo = [];
     public $user_id;
     public $service_id;
     public $state_id = 1;
     public bool $show = false;
     protected $messages = [];
 
+    public function buscar($tipo)
+    {
+        if ($tipo === 'marca') {
+            if (strlen($this->marca) < 1) {
+                $this->resultadosMarca = [];
+                return;
+            }
+
+            $this->resultadosMarca = Brand::where('name', 'LIKE', $this->marca . '%')
+                ->limit(5)
+                ->pluck('name', 'id')
+                ->toArray();
+        }
+        if ($tipo === 'modelo') {
+            if (strlen($this->modelo) < 1) {
+                $this->resultadosModelo = [];
+                return;
+            }
+
+            $this->resultadosModelo = Models::where('name', 'LIKE', $this->modelo . '%')
+                ->limit(5)
+                ->pluck('name', 'id')
+                ->toArray();
+        }
+    }
+    public function seleccionar($tipo,$id,$valor)
+    {
+            if ($tipo === 'marca') {
+                $this->marca = $valor;
+                $this->marca_id = $id;    
+
+                $this->modelo = '';
+                $this->modelo_id = null;
+
+                $this->resultadosMarca = [];
+            }
+
+            if ($tipo === 'modelo') {
+                $this->modelo = $valor;
+                $this->modelo_id = $id;
+
+                $this->resultadosModelo = [];
+            }
+    }
     protected function rules(): array
     {
         return [
@@ -84,8 +134,7 @@ class CreateReservationModal extends Component
         $vehicle = Vehicle::firstOrCreate(
             ['placa' => $this->placa],
             [
-                'marca' => $this->marca,
-                'modelo' => $this->modelo,
+                'model_id' => $this->modelo_id,
                 'user_id' => auth()->id(),
             ]
 

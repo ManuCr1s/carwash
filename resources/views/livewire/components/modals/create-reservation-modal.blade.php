@@ -42,16 +42,44 @@
                         </div>
 
                         <div>
-                            <input type="text" wire:model="marca"
+                           <input type="text" 
+                                wire:model="marca"
+                                wire:keyup="buscar('marca')"
                                 placeholder="Marca"
                                 class="w-full border rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500">
+                            @if(!empty($resultadosMarca))
+                                
+                                <ul class="absolute z-50 border rounded-lg mt-1 bg-white shadow max-h-40 overflow-y-auto">
+                                    @foreach($resultadosMarca as  $id => $item)
+                                        <li 
+                                            wire:click="seleccionar('marca', {{ $id }}, '{{ $item }}')"
+                                            class="px-3 py-2 hover:bg-blue-100 cursor-pointer pr-20">
+                                            {{ $item }}
+                                        </li>
+                                    @endforeach
+                                </ul>
+                            @endif
                             @error('marca') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
                         </div>
 
                         <div>
-                            <input type="text" wire:model="modelo"
-                                placeholder="Modelo"
+                           <input type="text" 
+                                wire:model="modelo"
+                                wire:keyup="buscar('modelo')"
+                                placeholder="Marca"
                                 class="w-full border rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500">
+                            @if(!empty($resultadosModelo))
+                                
+                                <ul class="absolute z-50 border rounded-lg mt-1 bg-white shadow max-h-40 overflow-y-auto">
+                                    @foreach($resultadosModelo as  $id => $item)
+                                        <li 
+                                            wire:click="seleccionar('modelo', {{ $id }}, '{{ $item }}')"
+                                            class="px-3 py-2 hover:bg-blue-100 cursor-pointer pr-20">
+                                            {{ $item }}
+                                        </li>
+                                    @endforeach
+                                </ul>
+                            @endif
                             @error('modelo') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
                         </div>
 

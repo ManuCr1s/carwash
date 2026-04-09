@@ -18,13 +18,15 @@ class ListReservationTable extends LivewireTable
     {
       return Reservation::query()
             ->join('vehicles', 'reservations.vehicle_id', '=', 'vehicles.id')
-            ->select('vehicles.marca', 'vehicles.modelo','vehicles.placa','reservations.date_reservation')
+            ->join('models','vehicles.model_id','=','models.id')
+            ->join('brands','brands.id','=','models.brand_id')
+            ->select('brands.name as brands_name','models.name as model_name','vehicles.placa','reservations.date_reservation')
             ->where('reservations.user_id','=',auth()->id());
     }
     protected function columns(): array{
         return [
-            Column::make(__('Marca'),'marca'),
-            Column::make(__('Modelo'), 'modelo'),
+            Column::make(__('Marca'), 'brands_name'),
+            Column::make(__('Modelo'), 'model_name'),
             Column::make(__('Placa'), 'placa'),
             Column::make(__('Dia de Reservacion'), 'date_reservation'),
         ];
