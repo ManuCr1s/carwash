@@ -32,17 +32,17 @@
                     @endcan
                     @can('ver pedido')
                     <x-nav-link href="{{ route('response.request') }}" :active="request()->routeIs('response.request')">
-                        {{ __('Atender') }}
+                        {{ __('Atender Reservaciones') }}
                     </x-nav-link>
                     @endcan
                     @can('ver despacho')
                     <x-nav-link href="{{ route('dispatch.create') }}" :active="request()->routeIs('dispatch.create')">
-                        {{ __('Despacho') }}
+                        {{ __('Despacho Atenciones') }}
                     </x-nav-link>
                     @endcan
                     @can('ver reporte')
                     <x-nav-link href="{{ route('report.reservation') }}" :active="request()->routeIs('report.reservation')">
-                        {{ __('Reporte') }}
+                        {{ __('Atenciones Realizadas') }}
                     </x-nav-link>
                     @endcan
                 </div>
