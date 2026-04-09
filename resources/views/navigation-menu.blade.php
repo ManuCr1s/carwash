@@ -26,7 +26,7 @@
                     </x-nav-link>
                     @endcan
                     @can('ver usuario')
-                    <x-nav-link href="{{ route('user.create') }}" :active="request()->routeIs('user.create')">
+                    <x-nav-link href="{{ route('create.user') }}" :active="request()->routeIs('create.user')">
                         {{ __('Usuarios') }}
                     </x-nav-link>
                     @endcan
