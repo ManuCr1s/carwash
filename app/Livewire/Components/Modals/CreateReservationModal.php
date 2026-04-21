@@ -28,7 +28,8 @@ class CreateReservationModal extends Component
     public $state_id = 1;
     public bool $show = false;
     protected $messages = [];
-
+    public $vehiculos = [];
+    public $vehicle_id = '';
     public function buscar($tipo)
     {
         if ($tipo === 'marca') {
@@ -109,6 +110,11 @@ class CreateReservationModal extends Component
     #[On('openReservationModal')]
     public function open($date = null, $slot = null, $service_id=null)
     {
+        $this->vehiculos = auth()->user()
+        ->vehicles()
+        ->with('model.brand')
+        ->get();
+
         if ($date) {
             $this->date_reservation = $date?? null;
             $this->time_reservation = $slot?? null;
@@ -119,27 +125,29 @@ class CreateReservationModal extends Component
     }
     public function save()
     {
-        $this->validate();
-        $exists = Reservation::where('date_reservation', $this->date_reservation)
-            ->where('time_reservation', $this->time_reservation)
-            ->exists();
+        $isSlotTaken = Reservation::where('date_reservation', $this->date_reservation)
+        ->where('time_reservation', $this->time_reservation)
+        ->exists();
 
-        if ($exists) {
+        if ($isSlotTaken) {
             $this->dispatch('swal', [
-                'icon' => 'error',
-                'title' => 'Ese horario ya está ocupado'
+                'icon'  => 'error',
+                'title' => 'Ese horario ya está ocupado',
             ]);
             return;
         }
-        $vehicle = Vehicle::firstOrCreate(
-            ['placa' => $this->placa],
-            [
-                'model_id' => $this->modelo_id,
-                'user_id' => auth()->id(),
-            ]
+        $isNewVehicle = $this->vehicle_id === 'new';
 
-        );
-     
+        if ($isNewVehicle) {
+            $this->validate();
+        }
+        $vehicle = $isNewVehicle
+        ? Vehicle::firstOrCreate(
+            ['placa'    => $this->placa],
+            ['model_id' => $this->modelo_id, 'user_id' => auth()->id()]
+        )
+        : Vehicle::findOrFail($this->vehicle_id);     
+        
         try {
             Reservation::create([
                 'vehicle_id' => $vehicle->id,

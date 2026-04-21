@@ -23,6 +23,33 @@
 
              
                 <div>
+                   
+                    <div>
+                            <div class="flex items-center gap-2 mb-4">
+                                <div class="w-8 h-8 bg-[#0f1a26] rounded-full flex items-center justify-center text-[#e6b84a]">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z"></path>
+                                    </svg>
+                                </div>
+                                <h4 class="font-semibold text-gray-700">Desea registrar vehiculo</h4>
+                            </div>
+                           <select wire:model.live="vehicle_id"
+                                class="w-full border rounded-lg px-3 py-2 text-sm mb-5">
+
+                                <option value="">Seleccione un vehículo</option>
+
+                                @foreach($vehiculos as $v)
+                                    <option value="{{ $v->id }}">
+                                        {{ $v->model->brand->name }} {{ $v->model->name }} - {{ $v->placa }}
+                                    </option>
+                                @endforeach
+
+                                <option value="new">➕ Registrar nuevo vehículo</option>
+
+                            </select>
+                    </div>
+     
+                    @if($vehicle_id === 'new')
                     <div class="flex items-center gap-2 mb-4">
                         <div class="w-8 h-8 bg-[#0f1a26] rounded-full flex items-center justify-center text-[#e6b84a]">
                             <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -45,7 +72,7 @@
                            <input type="text" 
                                 wire:model="marca"
                                 wire:keyup="buscar('marca')"
-                                placeholder="Marca"
+                                placeholder="Modelo"
                                 class="w-full border rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500">
                             @if(!empty($resultadosMarca))
                                 
@@ -84,6 +111,7 @@
                         </div>
 
                     </div>
+                    @endif
                 </div>
             </div>
 

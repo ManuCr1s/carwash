@@ -29,6 +29,7 @@ class ListReservationTable extends LivewireTable
             Column::make(__('Modelo'), 'model_name'),
             Column::make(__('Placa'), 'placa'),
             Column::make(__('Dia de Reservacion'), 'date_reservation'),
+            ViewColumn::make('Ver','components.table-report-action'),
         ];
     }
 
