@@ -7,5 +7,6 @@
         <div class="w-full max-w-5xl">
             <livewire:components.tables.response-request-table />
             <livewire:components.modals.handle-reservation-modal />
+            <livewire:components.modals.create-user-modal />
         </div>
     </div>

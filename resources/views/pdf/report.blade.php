@@ -23,9 +23,9 @@
     <div class="grid grid-cols-2 gap-8 mb-8 border-y-2 py-6 border-gray-100">
         <div class="space-y-1">
             <h3 class="text-[11px] font-bold text-gray-400 uppercase tracking-widest mb-2">Información del Cliente</h3>
-            <p class="text-md"><strong>NOMBRE:</strong> {{$reservation->user->name ?? 'AUN NO REGISTRADO'}}</p>
+            <p class="text-md"><strong>NOMBRE:</strong> {{$reservation->user->name .' '.$reservation->user->lastname?? 'AUN NO REGISTRADO'}}</p>
             <p class="text-md text-gray-700"><strong>DNI/RUC:</strong> {{ $reservation->user->dni ??  'AUN NO REGISTRADO'}}</p>
-            <p class="text-md text-gray-700"><strong>TELÉFONO:</strong> {{ $reservation->user->dni ??  'AUN NO REGISTRADO'}}</p>
+            <p class="text-md text-gray-700"><strong>TELÉFONO:</strong> {{ $reservation->user->phone ??  'AUN NO REGISTRADO'}}</p>
         </div>
         <div class="space-y-1 text-right border-l pl-8 border-gray-100">
             <h3 class="text-[11px] font-bold text-gray-400 uppercase tracking-widest mb-2">Detalles del Vehículo</h3>
@@ -72,7 +72,7 @@
                 <p class="text-[10px] font-black uppercase">Firma del Cliente</p>
             </div>
             <div class="text-right text-[10px] font-bold">
-                FECHA: {{ \Carbon\Carbon::now()->format('d / m / Y') }}
+                FECHA DE IMPRESION: {{ \Carbon\Carbon::now()->format('d / m / Y') }}
             </div>
         </div>
     </div>

@@ -75,7 +75,8 @@
                             @error('phone') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
                         </div> 
                     </div>
-                     <div class="flex items-center gap-2 mt-4">
+                    @can('editar usuario')
+                    <div class="flex items-center gap-2 mt-4">
                         <div class="w-8 h-8 bg-[#0f1a26] rounded-full flex items-center justify-center text-[#e6b84a]">
                             <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -84,20 +85,21 @@
                         </div>
                         <h4 class="font-semibold text-gray-700">Seleccione Rol de Usuario</h4>
                     </div>
-
-                    <div class="grid grid-cols-1 md:grid-cols-1 gap-2 mt-4">
-                        <select 
-                            id="role" 
-                            wire:model="roleId" 
-                            class="block mt-1 w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm"
-                        >
-                            <option value="">-- Seleccione un Rol --</option>
-                            @foreach($roles as $role)
-                                <option value="{{ $role->id }}">{{ strtoupper($role->name) }}</option>
-                            @endforeach
-                        </select>
-                        @error('roleId') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
-                    </div>
+                    
+                        <div class="grid grid-cols-1 md:grid-cols-1 gap-2 mt-4">
+                            <select 
+                                id="role" 
+                                wire:model="roleId" 
+                                class="block mt-1 w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm"
+                            >
+                                <option value="">-- Seleccione un Rol --</option>
+                                @foreach($roles as $role)
+                                    <option value="{{ $role->id }}">{{ strtoupper($role->name) }}</option>
+                                @endforeach
+                            </select>
+                            @error('roleId') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
+                        </div>
+                    @endcan
                 </div>    
             </div>
 

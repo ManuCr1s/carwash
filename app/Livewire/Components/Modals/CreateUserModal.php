@@ -72,44 +72,95 @@ class CreateUserModal extends Component
 
 
     #[On('openCreateModal')]
-    public function openCreateModal()
+    public function openCreateModal($id = null)
     {
         $this->show   = true;
+        if($id !== null){
+            $user = User::find($id);
+            $this->userId = $user->id;
+            $this->name   = $user->name;
+            $this->email  = $user->email;
+        }
+     
     }
 
     public function save(){
-        $validatedData = $this->validate();
-        try {
-            \DB::transaction(function () use ($validatedData) {
-                $user = User::create([
-                    'name'     => $validatedData['name'],
-                    'lastname' => $validatedData['lastname'],
-                    'dni' => $validatedData['dni'],
-                    'phone' => $validatedData['phone'],
-                    'email'    => $validatedData['email'],
-                    'password' => bcrypt('123456'),
-                ]);
-                $role = Role::find($validatedData['roleId']);
-                $user->assignRole($role); 
-            });
+        if($this->userId === null){
+            $validatedData = $this->validate();
+            try {
+                \DB::transaction(function () use ($validatedData) {
+                    $user = User::create([
+                        'name'     => $validatedData['name'],
+                        'lastname' => $validatedData['lastname'],
+                        'dni' => $validatedData['dni'],
+                        'phone' => $validatedData['phone'],
+                        'email'    => $validatedData['email'],
+                        'password' => bcrypt('123456'),
+                    ]);
+                    $role = Role::find($validatedData['roleId']);
+                    $user->assignRole($role); 
+                });
 
-            // 3. Feedback de éxito
-            $this->dispatch('swal', [
-                'icon'  => 'success',
-                'title' => '¡Usuario Creado!',
-                'text'  => 'El registro se ha completado correctamente.'
+                // 3. Feedback de éxito
+                $this->dispatch('swal', [
+                    'icon'  => 'success',
+                    'title' => '¡Usuario Creado!',
+                    'text'  => 'El registro se ha completado correctamente.'
+                ]);
+
+                $this->reset(); // Limpia el formulario
+                $this->show = false; // Cierra el modal
+                $this->dispatch('tableRefresh'); // Refresca la lista de usuarios
+
+            } catch (\Exception $e) {
+                // 4. Manejo de errores inesperados
+                $this->dispatch('swal', [
+                    'icon'  => 'error',
+                    'title' => 'Error de sistema',
+                    'text'  => 'No se pudo guardar el usuario. Intente más tarde.'
+                ]);
+            }
+        }else{
+            $this->validate([
+                'dni' => [
+                    'required', 
+                    'string', 
+                    'max:8', 
+                    Rule::unique('users', 'dni')->ignore($this->userId)
+                ],
+                'phone' => ['required', 'string', 'min:7', 'max:20'],
+                'name' => ['string'],
+                'lastname' => ['string']
+            ], [
+                'dni.required' => 'El número de DNI es obligatorio.',
+                'dni.string'   => 'El DNI debe ser una cadena de texto válida.',
+                'dni.max'      => 'El DNI no puede tener más de 8 caracteres.',
+                'dni.unique'   => 'Este número de DNI ya se encuentra registrado.',
+                
+                'phone.required' => 'El número de teléfono es obligatorio.',
+                'phone.string'   => 'El formato del teléfono no es válido.',
+                'phone.min'      => 'El teléfono debe tener al menos :min caracteres.',
+                'phone.max'      => 'El teléfono no puede superar los :max caracteres.',
+
+                'name.string' => 'El nombre debe ser un cadana de texto valida',
+
+                'lastname.string' => 'EL apellido debe ser una cadena de texto valida',
+            ]);
+            User::where('id', $this->userId)
+            ->update([               
+                'dni'  => strtoupper($this->dni),
+                'name'  => strtoupper($this->name),
+                'lastname'  => strtoupper($this->lastname),
+                'phone' => strtoupper($this->phone),
             ]);
 
-            $this->reset(); // Limpia el formulario
-            $this->show = false; // Cierra el modal
-            $this->dispatch('tableRefresh'); // Refresca la lista de usuarios
+            $this->show = false;
+            $this->dispatch('tableRefresh');
 
-        } catch (\Exception $e) {
-            // 4. Manejo de errores inesperados
             $this->dispatch('swal', [
-                'icon'  => 'error',
-                'title' => 'Error de sistema',
-                'text'  => 'No se pudo guardar el usuario. Intente más tarde.'
+                'icon'  => 'success',
+                'title' => '¡Actualizado!',
+                'showConfirmButton' => true,
             ]);
         }
     }

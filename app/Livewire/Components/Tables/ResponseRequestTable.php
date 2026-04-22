@@ -29,12 +29,16 @@ class ResponseRequestTable extends LivewireTable
     {
         $this->dispatch('openHandleModal', id: $id);
     }
+    public function create($id)
+    {
+        $this->dispatch('openCreateModal', id:$id);
+    }
     #[On('tableRefresh')]
     public function tableRefresh(): void {}
     protected function columns(): array{
         return [
             Column::make(__('ID'),'id'),
-            Column::make(__('Name'), 'name'),
+            Column::make(__('Servicio'), 'name'),
             Column::make(__('Marca'), 'brands_name'),
             Column::make(__('Placa'), 'placa'),
             Column::make(__('Modelo'), 'models_name'),   
