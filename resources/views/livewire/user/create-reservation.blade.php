@@ -34,7 +34,7 @@
                                         {{$service->name}} - {{$service->description}}
                                 </option>
                             @endforeach
-                    </select>
+                        </select>
                     </div>
             </div>
     </div>

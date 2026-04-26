@@ -34,8 +34,18 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'dni',
+        'lastname',
+        'phone',
+        'google_id'
     ];
     protected function name():Attribute
+    {
+        return Attribute::set(
+                fn(string $value): string => strtoupper(trim($value))
+        );
+    }
+    protected function lastname():Attribute
     {
         return Attribute::set(
                 fn(string $value): string => strtoupper(trim($value))

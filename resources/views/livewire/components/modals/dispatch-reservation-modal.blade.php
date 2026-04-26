@@ -84,7 +84,7 @@
                     <div class="grid grid-cols-1 md:grid-cols-1 gap-4">
                                 <textarea
                                         wire.model='observations'
-                                        class="w-full bg-white/10 backdrop-blur-md border border-gray-300 text-white placeholder:text-xs placeholder-gray-400 rounded-xl p-4 focus:ring-2 focus:ring-purple-400 outline-none"
+                                        class="w-full bg-white/10 backdrop-blur-md border border-gray-300 placeholder:text-xs placeholder-gray-400 rounded-xl p-4 focus:ring-2 focus:ring-purple-400 outline-none"
                                         placeholder="Escribe aqui tu observacion"
                                 ></textarea>
                                  @error('observations')

@@ -95,7 +95,7 @@ class CreateUserModal extends Component
                         'dni' => $validatedData['dni'],
                         'phone' => $validatedData['phone'],
                         'email'    => $validatedData['email'],
-                        'password' => bcrypt('123456'),
+                        'password' => bcrypt($validatedData['dni']),
                     ]);
                     $role = Role::find($validatedData['roleId']);
                     $user->assignRole($role); 
