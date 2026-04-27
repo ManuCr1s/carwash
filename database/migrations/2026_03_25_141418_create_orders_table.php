@@ -17,7 +17,8 @@ return new class extends Migration
             $table->foreignId('reserva_id')->constrained('reservations')->onDelete('cascade');
             $table->dateTime('date_init',0)->nullable();
             $table->dateTime('date_end',0)->nullable();
-            $table->string('observations')->nullable();
+            $table->string('observations_start')->nullable();
+            $table->string('observations_end')->nullable();
             $table->decimal('price',12,2);
             $table->timestamps();
         });

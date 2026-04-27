@@ -20,7 +20,7 @@ class HandleReservationModal extends Component
     public $date_init;
     public $price;
     //Slots nuevo para las 6 fotos
-    public $photo1, $photo2, $photo3, $photo4, $photo5, $photo6, $observations;
+    public $photo1, $photo2, $photo3, $photo4, $photo5, $photo6, $observations = '';
     #[On('openHandleModal')]
     public function openHandleModal($id)
     {
@@ -36,6 +36,11 @@ class HandleReservationModal extends Component
         return [
             'observations' => 'max:255',
             'photo1' => 'required|image|max:2048',
+            'photo2' => 'required|image|max:2048',
+            'photo3' => 'required|image|max:2048',
+            'photo4' => 'required|image|max:2048',
+            'photo5' => 'required|image|max:2048',
+            'photo6' => 'required|image|max:2048',
             'price' =>  ['required', 'numeric', 'regex:/^\d{1,10}(\.\d{1,2})?$/']
         ];
     }
@@ -47,6 +52,26 @@ class HandleReservationModal extends Component
             'photo1.required' => 'Debe subir una imagen.',
             'photo1.image' => 'El archivo debe ser una imagen válida (jpg, png, etc).',
             'photo1.max' => 'La imagen no debe superar los 2MB.',
+
+            'photo2.required' => 'Debe subir una imagen.',
+            'photo2.image' => 'El archivo debe ser una imagen válida (jpg, png, etc).',
+            'photo2.max' => 'La imagen no debe superar los 2MB.',
+
+            'photo3.required' => 'Debe subir una imagen.',
+            'photo3.image' => 'El archivo debe ser una imagen válida (jpg, png, etc).',
+            'photo3.max' => 'La imagen no debe superar los 2MB.',
+
+            'photo4.required' => 'Debe subir una imagen.',
+            'photo4.image' => 'El archivo debe ser una imagen válida (jpg, png, etc).',
+            'photo4.max' => 'La imagen no debe superar los 2MB.',
+
+            'photo5.required' => 'Debe subir una imagen.',
+            'photo5.image' => 'El archivo debe ser una imagen válida (jpg, png, etc).',
+            'photo5.max' => 'La imagen no debe superar los 2MB.',
+
+            'photo6.required' => 'Debe subir una imagen.',
+            'photo6.image' => 'El archivo debe ser una imagen válida (jpg, png, etc).',
+            'photo6.max' => 'La imagen no debe superar los 2MB.',
 
             'price.required' => 'El precio es obligatorio.',
             'price.numeric' => 'El precio debe ser un número válido.',
@@ -61,12 +86,12 @@ class HandleReservationModal extends Component
             DB::transaction(function () {
                 $user = auth()->user();
                 $reservation = Reservation::findOrFail($this->reservaId);
-
+            
                 // 1. Crear la Orden
                 $order = $user->orders()->create([
                     'reserva_id'   => $this->reservaId,
                     'date_init'    => now(),
-                    'observations' => $this->observations,
+                    'observations_start' => $this->observations,
                     'price' => $this->price,
                 ]);
 

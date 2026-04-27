@@ -12,7 +12,8 @@ class Order extends Model
         'user_id',
         'date_init',
         'date_end',
-        'observations',
+        'observations_start',
+        'observations_end',
         'price'
     ];
     public function user()

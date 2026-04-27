@@ -47,7 +47,9 @@
     </div>
 
     <div class="mb-8">
-        <h3 class="text-xs font-black text-green-800 uppercase mb-3 border-b pb-1">✨ Entrega Final (Después)</h3>
+        @if ($order->date_end !== null )
+            <h3 class="text-xs font-black text-green-800 uppercase mb-3 border-b pb-1">✨ Entrega Final (Después)</h3>
+        @endif
         <div class="grid grid-cols-3 gap-3">
             @foreach($reservation->order->photos->where('type_photo', 0) as $photo)
                 <div class="rounded-lg overflow-hidden border-2 border-gray-100">

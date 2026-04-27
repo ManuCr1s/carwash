@@ -15,8 +15,9 @@ class PermissionSeeder extends Seeder
      */
     public function run(): void
     {
-        $rol = Role::where('name','USUARIO')->first();
-        Permission::create(['name' => 'ver despacho'])->assignRole($rol); 
+        $rol = Role::where('name','ADMINISTRADOR')->first();
+        $user = User::find(1);
+        $user->assignRole($rol);
         // 
     }
 }

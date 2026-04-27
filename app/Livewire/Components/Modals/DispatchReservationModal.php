@@ -60,6 +60,7 @@ class DispatchReservationModal extends Component
                 if($order){
                     $order->update([
                         'date_end' => now(),
+                        'observations_end' => $this->observations,
                     ]);
                 }else {
                     $this->dispatch('swal', [
@@ -77,7 +78,7 @@ class DispatchReservationModal extends Component
                         
                         $order->photos()->create([
                             'url_image'  => $path,
-                            'type_photo' => false, // Despues del lavado
+                            'type_photo' => false,
                         ]);
                     }
                 }
@@ -90,7 +91,7 @@ class DispatchReservationModal extends Component
             $this->dispatch('tableRefresh');
             $this->dispatch('swal', [
                 'title' => '¡Completado!',
-                'text' => 'Vehículo complicado, ¡Para su despacho!',
+                'text' => 'Vehículo lavado, ¡Para su despacho!',
                 'icon' => 'success'
             ]);
 
