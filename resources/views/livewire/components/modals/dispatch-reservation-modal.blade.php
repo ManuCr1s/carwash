@@ -41,11 +41,25 @@
                                     x-data 
                                     x-init="
                                             FilePond.create($refs.input{{ $i }}, {
-                                                labelIdle: `<span class='text-xs'>Tocar para Foto</span>`,
+                                                labelIdle: `<span class='text-xs'>{{$tags[$i]}}</span>`,
                                                 imagePreviewHeight: 80,
                                                 circleButtonRemoveItem: true,
                                                 credits: false, {{-- Esto quita el texto de 'Powered by FilePond' --}}
                                                 captureMethod: 'camera',
+
+                                                {{-- Para la Redimension --}}
+                                                allowImageResize: true,
+                                                imageResizeTargetWidth: 800,
+                                                imageResizeTargetHeight: 800,
+                                                imageResizeMode: 'contain',
+                                                imageResizeUpscale: false,
+                                                
+                                                {{--Para la Compresion --}}
+                                                allowImageTransform: true,
+                                                imageTransformOutputMimeType: 'image/webp',
+                                                imageTransformOutputQuality: 75,
+                                                imageTransformOutputQualityMode: 'always',
+
                                                 server: {
                                                     process: (fieldName, file, metadata, load, error, progress, abort, transfer, options) => {
                                                         @this.upload('photo{{ $i }}', file, load, error, progress)

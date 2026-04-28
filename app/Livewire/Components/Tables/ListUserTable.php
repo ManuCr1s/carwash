@@ -20,19 +20,25 @@ class ListUserTable extends LivewireTable
         $user = User::find($id);
     
         if (!$user) {
-            $this->dispatch('swal', [
+            return $this->dispatch('swal', [
                 'icon'  => 'error',
-                'title' => 'Usuario no encontrado',
+                'title' => __('Usuario no encontrado'),
+                'text'  => __('No se pudo localizar el registro en la base de datos.'),
             ]);
-            return;
         }
-        $user->delete();
+        $user->active = !$user->active;
+        $user->save();
+
+        $status = $user->active ? __('activado') : __('desactivado');
+        $icon   = $user->active ? 'success' : 'warning';
 
         $this->dispatch('swal', [
             'icon'  => 'success',
-            'title' => '¡Eliminado!',
-            'showConfirmButton' => true,
+            'title' => 'Estado actualizado',
+            'text'  => "El usuario {$user->name} ha sido " . ($user->active ? 'activado' : 'desactivado'),
         ]);
+
+        $this->dispatch('tableRefresh');
     }
     public function edit($id)
     {

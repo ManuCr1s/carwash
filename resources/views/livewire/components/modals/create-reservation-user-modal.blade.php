@@ -94,7 +94,16 @@
                             @error('placa') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
                         </div>
 
-                        <div>
+                        <div class="relative w-full"
+                            x-data="{dropUp:false}"
+                            x-init="$watch('$wire.resultadosMarca', value => {
+                                if (value && Object.keys(value).length > 0) {
+                                    const rect = $el.getBoundingClientRect();
+                                    const spaceBelow = window.innerHeight - rect.bottom;
+                                    dropUp = spaceBelow < 200; 
+                                }
+                            })"
+                        >
                            <input type="text" 
                                 wire:model="marca"
                                 wire:keyup="buscar('marca')"
@@ -102,7 +111,8 @@
                                 class="w-full border rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500">
                             @if(!empty($resultadosMarca))
                                 
-                                <ul class="absolute z-50 border rounded-lg mt-1 bg-white shadow max-h-40 overflow-y-auto">
+                                <ul class="absolute left-0 z-[100] w-full border rounded-lg bg-white shadow-2xl max-h-40 overflow-y-auto"
+                                    :class="dropUp ? 'bottom-full mb-1' : 'top-full mt-1'">
                                     @foreach($resultadosMarca as  $id => $item)
                                         <li 
                                             wire:click="seleccionar('marca', {{ $id }}, '{{ $item }}')"
@@ -115,7 +125,16 @@
                             @error('marca') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
                         </div>
 
-                        <div>
+                        <div class="relative w-full"
+                            x-data="{dropUp:false}"
+                            x-init="$watch('$wire.resultadosModelo', value => {
+                                if (value && Object.keys(value).length > 0) {
+                                    const rect = $el.getBoundingClientRect();
+                                    const spaceBelow = window.innerHeight - rect.bottom;
+                                    dropUp = spaceBelow < 200; 
+                                }
+                            })"
+                        >
                            <input type="text" 
                                 wire:model="modelo"
                                 wire:keyup="buscar('modelo')"
@@ -123,7 +142,8 @@
                                 class="w-full border rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500">
                             @if(!empty($resultadosModelo))
                                 
-                                <ul class="absolute z-50 border rounded-lg mt-1 bg-white shadow max-h-40 overflow-y-auto">
+                                <ul class="absolute left-0 z-[100] w-full border rounded-lg bg-white shadow-2xl max-h-40 overflow-y-auto"
+                                    :class="dropUp ? 'bottom-full mb-1' : 'top-full mt-1'">
                                     @foreach($resultadosModelo as  $id => $item)
                                         <li 
                                             wire:click="seleccionar('modelo', {{ $id }}, '{{ $item }}')"

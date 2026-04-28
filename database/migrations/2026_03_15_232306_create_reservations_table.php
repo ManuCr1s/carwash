@@ -20,6 +20,7 @@ return new class extends Migration
             $table->date('date_reservation');
             $table->time('time_reservation',precision:0);
             $table->unique(['date_reservation', 'time_reservation']);
+/*          $table->foreignId('user_id')->nullable()->constrained('users')->onDelete('cascade'); */         
             $table->timestamps();
         });
     }

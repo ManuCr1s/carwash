@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('dni', 15)->nullable()->unique();
             $table->string('phone', 20)->nullable();
             $table->string('google_id')->nullable();
+            $table->boolean('active')->default(true);
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password')->nullable();

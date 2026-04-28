@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        @page { size: A4; margin: 0; }
-        body { font-family: 'Helvetica', sans-serif; color: #1a202c; }
+        @page { size: A4; margin: 1.5cm; }
+        body { font-family: 'Helvetica', sans-serif; color: #1a202c; margin: 0;}
     </style>
 </head>
 <body class="p-10 bg-white">
@@ -35,25 +35,25 @@
         </div>
     </div>
 
-    <div class="mb-8">
+    <div class="mb-8" style="page-break-inside: avoid;">
         <h3 class="text-xs font-black text-blue-900 uppercase mb-3 border-b pb-1">📸 Inspección Inicial (Antes)</h3>
-        <div class="grid grid-cols-3 gap-3">
+        <div class="grid grid-cols-2 gap-2">
             @foreach($reservation->order->photos->where('type_photo', 1) as $photo)
                 <div class="rounded-lg overflow-hidden border-2 border-gray-100">
-                    <img src="{{ public_path('storage/' . $photo->url_image) }}" class="w-full h-48 object-cover">
+                    <img src="{{ public_path('storage/' . $photo->url_image) }}" class="w-full object-contain">
                 </div>
             @endforeach
         </div>
     </div>
 
-    <div class="mb-8">
+    <div class="mb-8" style="page-break-inside: avoid;">
         @if ($order->date_end !== null )
             <h3 class="text-xs font-black text-green-800 uppercase mb-3 border-b pb-1">✨ Entrega Final (Después)</h3>
         @endif
-        <div class="grid grid-cols-3 gap-3">
+        <div class="grid grid-cols-2 gap-2">
             @foreach($reservation->order->photos->where('type_photo', 0) as $photo)
                 <div class="rounded-lg overflow-hidden border-2 border-gray-100">
-                    <img src="{{ public_path('storage/' . $photo->url_image) }}" class="w-full h-48 object-cover">
+                    <img src="{{ public_path('storage/' . $photo->url_image) }}" class="w-full object-contain">
                 </div>
             @endforeach
         </div>

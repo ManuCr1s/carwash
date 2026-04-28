@@ -19,6 +19,14 @@ class HandleReservationModal extends Component
     public $photos = [];
     public $date_init;
     public $price;
+    public $tags = [
+        1=>'Foto Delatera',
+        2=>'Foto Trasera',
+        3=>'Foto Puerta Derecha Abierta',
+        4=>'Foto Puerta Derecha Cerrada',
+        5=>'Foto Puerta Izquierda Abierta',
+        6=>'Foto Puerta Izquierda Cerrada',
+    ];
     //Slots nuevo para las 6 fotos
     public $photo1, $photo2, $photo3, $photo4, $photo5, $photo6, $observations = '';
     #[On('openHandleModal')]
@@ -127,6 +135,8 @@ class HandleReservationModal extends Component
     }
     public function render()
     {
-        return view('livewire.components.modals.handle-reservation-modal');
+        return view('livewire.components.modals.handle-reservation-modal',[
+            'tags' => $this->tags
+        ]);
     }
 }

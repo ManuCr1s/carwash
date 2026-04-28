@@ -35,6 +35,7 @@ class User extends Authenticatable
         'email',
         'password',
         'dni',
+        'active',
         'lastname',
         'phone',
         'google_id'
@@ -104,16 +105,30 @@ class User extends Authenticatable
     }
     protected function dashboardTitle(): Attribute
     {
-    return Attribute::make(
-        get: function () {
-            if ($this->hasRole('ADMINISTRADOR')) {
-                return __('Panel de Administración');
-            }
-            if ($this->hasRole('USUARIO')) {
-                return __('Mi Panel de Atenciones');
-            }
-            return __('Mi Panel de Reservas');
-        },
-    );
-}
+        return Attribute::make(
+            get: function () {
+                if ($this->hasRole('ADMINISTRADOR')) {
+                    return __('Panel de Administración');
+                }
+                if ($this->hasRole('USUARIO')) {
+                    return __('Mi Panel de Atenciones');
+                }
+                return __('Mi Panel de Reservas');
+            },
+        );
+    }
+     public function getStatusActionConfig(): object
+    {
+        $isActive = (bool) $this->active;
+
+        return (object) [
+            'isActive'    => $isActive,
+            'color'       => $isActive ? 'bg-red-600 hover:bg-red-700' : 'bg-blue-600 hover:bg-blue-700',
+            'btnText'     => $isActive ? 'Desactivar' : 'Activar',
+            'swalTitle'   => $isActive ? '¿Desactivar usuario?' : '¿Activar usuario?',
+            'swalConfirm' => $isActive ? 'Sí, Desactivar' : 'Sí, Activar',
+            'confirmColor'=> $isActive ? '#d33' : '#16a34a',
+            'icon'        => $isActive ? 'warning' : 'question',
+        ];
+    }
 }

@@ -17,6 +17,14 @@ class DispatchReservationModal extends Component
     public $date_init;
     public $price;
     //Slots nuevo para las 6 fotos
+    public $tags = [
+        1=>'Foto Delatera',
+        2=>'Foto Trasera',
+        3=>'Foto Puerta Derecha Abierta',
+        4=>'Foto Puerta Derecha Cerrada',
+        5=>'Foto Puerta Izquierda Abierta',
+        6=>'Foto Puerta Izquierda Cerrada',
+    ];
     public $photo1, $photo2, $photo3, $photo4, $photo5, $photo6, $observations;
     #[On('openDispatchModal')]
     public function openDispatchModal($id)
@@ -34,6 +42,11 @@ class DispatchReservationModal extends Component
         return [
             'observations' => 'max:255',
             'photo1' => 'required|image|max:2048',
+            'photo2' => 'required|image|max:2048',
+            'photo3' => 'required|image|max:2048',
+            'photo4' => 'required|image|max:2048',
+            'photo5' => 'required|image|max:2048',
+            'photo6' => 'required|image|max:2048'
         ];
     }
     protected function messages(): array
@@ -44,6 +57,26 @@ class DispatchReservationModal extends Component
             'photo1.required' => 'Debe subir una imagen.',
             'photo1.image' => 'El archivo debe ser una imagen válida (jpg, png, etc).',
             'photo1.max' => 'La imagen no debe superar los 2MB.',
+
+            'photo2.required' => 'Debe subir una imagen.',
+            'photo2.image' => 'El archivo debe ser una imagen válida (jpg, png, etc).',
+            'photo2.max' => 'La imagen no debe superar los 2MB.',
+
+            'photo3.required' => 'Debe subir una imagen.',
+            'photo3.image' => 'El archivo debe ser una imagen válida (jpg, png, etc).',
+            'photo3.max' => 'La imagen no debe superar los 2MB.',
+
+            'photo4.required' => 'Debe subir una imagen.',
+            'photo4.image' => 'El archivo debe ser una imagen válida (jpg, png, etc).',
+            'photo4.max' => 'La imagen no debe superar los 2MB.',
+
+            'photo5.required' => 'Debe subir una imagen.',
+            'photo5.image' => 'El archivo debe ser una imagen válida (jpg, png, etc).',
+            'photo5.max' => 'La imagen no debe superar los 2MB.',
+
+            'photo6.required' => 'Debe subir una imagen.',
+            'photo6.image' => 'El archivo debe ser una imagen válida (jpg, png, etc).',
+            'photo6.max' => 'La imagen no debe superar los 2MB.',
         ];
     }
     public function processDispatch()
@@ -101,6 +134,8 @@ class DispatchReservationModal extends Component
     }
     public function render()
     {
-        return view('livewire.components.modals.dispatch-reservation-modal');
+        return view('livewire.components.modals.dispatch-reservation-modal',[
+            'tags' => $this->tags
+        ]);
     }
 }
