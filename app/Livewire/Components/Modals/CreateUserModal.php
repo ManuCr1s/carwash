@@ -50,7 +50,7 @@ class CreateUserModal extends Component
             // Validación para Username
             'dni.required' => 'El número de DNI es obligatorio.',
             'dni.string'   => 'El DNI debe ser una cadena de texto válida.',
-            'dni.max'      => 'El DNI no puede tener más de 8 caracteres.',
+            'dni.max'      => 'El DNI no puede tener 8 caracteres.',
             'dni.unique'   => 'Este número de DNI ya se encuentra registrado.',
 
             // Validacion para Phone
