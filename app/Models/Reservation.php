@@ -31,6 +31,8 @@ class Reservation extends Model
         'service_id',
         'state_id',
         'date_reservation',
-        'time_reservation'
+        'time_reservation',
+        'created_by',
+        'updated_by'
     ];
 }

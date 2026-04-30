@@ -155,7 +155,8 @@ class CreateReservationModal extends Component
                 'service_id' => $this->service_id,
                 'state_id' => $this->state_id,
                 'date_reservation' => $this->date_reservation,
-                'time_reservation' => $this->time_reservation,        
+                'time_reservation' => $this->time_reservation,    
+                'created_by' => auth()->id(),    
             ]);
         } catch (\Illuminate\Database\QueryException $e) {
                 $this->dispatch('swal', [

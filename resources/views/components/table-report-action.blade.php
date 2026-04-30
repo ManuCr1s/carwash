@@ -9,4 +9,28 @@
             </svg>
         </a>
     @endif
+    <button 
+        type="button"
+        class="inline-flex items-center px-3 py-1.5 bg-red-600 hover:bg-red-700' text-white text-xs font-bold uppercase rounded shadow-md transition-all duration-150 mx-1"
+        onclick="
+            Swal.fire({
+                icon: 'warning',
+                title: '¿Eliminar reserva?',
+                text: 'No podra deshacer esta operacion',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                confirmButtonText: 'Sí, Eliminar',
+                cancelButtonText: 'Cancelar',
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    @this.delete({{ $model->id }})
+                }
+            });
+        "
+    >
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 mr-1.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+        Eliminar
+    </button>
 </div>

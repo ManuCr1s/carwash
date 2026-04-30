@@ -14,6 +14,28 @@ use Livewire\Attributes\On;
 class ListReservationTable extends LivewireTable
 {
     protected string $model = Reservation::class;
+    public function delete($id)
+    {
+        $reservation = Reservation::find($id);
+    
+        if (!$reservation) {
+            return $this->dispatch('swal', [
+                'icon'  => 'error',
+                'title' => __('Reserva no encontrado'),
+                'text'  => __('No se pudo localizar el registro en la base de datos.'),
+            ]);
+        }
+
+        $reservation->delete();
+
+        $this->dispatch('swal', [
+            'icon'  => 'success',
+            'title' => __('Reserva eliminada'),
+            'text'  => __('La reserva ha sido borrada correctamente.'),
+        ]);
+
+        $this->dispatch('tableRefresh');
+    }
     public function query(): Builder
     {
       return Reservation::query()

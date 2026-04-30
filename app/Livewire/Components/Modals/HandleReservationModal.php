@@ -101,8 +101,8 @@ class HandleReservationModal extends Component
                     'date_init'    => now(),
                     'observations_start' => $this->observations,
                     'price' => $this->price,
+                    'updated_by' => auth()->id(),
                 ]);
-
                 // 2. Procesar las 6 fotos
                 for ($i = 1; $i <= 6; $i++) {
                     $property = "photo$i";
@@ -117,7 +117,7 @@ class HandleReservationModal extends Component
                 }
 
                 // 3. Actualizar estado de reserva
-                $reservation->update(['state_id' => 2]);
+                $reservation->update(['state_id' => 2,'updated_by' => auth()->id()]);
             });
 
             $this->show = false;

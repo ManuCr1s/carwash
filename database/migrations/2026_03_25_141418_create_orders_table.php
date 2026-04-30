@@ -20,6 +20,8 @@ return new class extends Migration
             $table->string('observations_start')->nullable();
             $table->string('observations_end')->nullable();
             $table->decimal('price',12,2);
+            $table->unsignedBigInteger('created_by')->nullable();
+            $table->unsignedBigInteger('updated_by')->nullable();
             $table->timestamps();
         });
     }

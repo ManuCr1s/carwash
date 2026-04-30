@@ -210,7 +210,8 @@ class CreateReservationUserModal extends Component
                     'service_id' => $validatedData['service_id'],
                     'state_id' => $this->state_id,
                     'date_reservation' => $this->date_reservation,
-                    'time_reservation' => $horaFormateada,  
+                    'time_reservation' => $horaFormateada, 
+                    'created_by' => auth()->id 
                 ]);
             });
 

@@ -94,6 +94,7 @@ class DispatchReservationModal extends Component
                     $order->update([
                         'date_end' => now(),
                         'observations_end' => $this->observations,
+                        'updated_by' => auth()->id(),
                     ]);
                 }else {
                     $this->dispatch('swal', [
@@ -117,7 +118,7 @@ class DispatchReservationModal extends Component
                 }
 
                 // 3. Actualizar estado de reserva
-                $reservation->update(['state_id' => 3]);
+                $reservation->update(['state_id' => 3, 'updated_by' => auth()->id()]);
             });
 
             $this->show = false;

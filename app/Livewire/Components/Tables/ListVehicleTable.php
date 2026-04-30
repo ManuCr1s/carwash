@@ -14,7 +14,14 @@ use Livewire\Attributes\On;
 class ListVehicleTable extends LivewireTable
 {
     protected string $model = Vehicle::class;
-      public function query(): Builder
+
+    public function edit($id)
+    {
+        $this->dispatch('openEditModal', id: $id);
+    }
+    #[On('tableRefresh')]
+    public function tableRefresh(): void {}
+    public function query(): Builder
     {
       return Vehicle::query()
             ->join('models','vehicles.model_id','=','models.id')
@@ -28,6 +35,7 @@ class ListVehicleTable extends LivewireTable
             Column::make(__('Modelo'), 'model_name'),
             Column::make(__('Placa'), 'placa'),
             Column::make(__('Dia de Creacion'), 'created_at'),
+            ViewColumn::make('Acciones','components.table-vehicle-action'),
         ];
     }
 /*     public function render()

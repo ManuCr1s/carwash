@@ -7,6 +7,7 @@
     <div class="flex justify-center mt-5">
         <div class="w-full max-w-5xl">
                 <livewire:components.tables.list-vehicle-table />
+                <livewire:components.modals.edit-vehicle-modal />
         </div>
     </div>
 </x-app-layout>

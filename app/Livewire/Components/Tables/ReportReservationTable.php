@@ -23,7 +23,8 @@ class ReportReservationTable extends LivewireTable
             ->join('models', 'vehicles.model_id', '=', 'models.id')
             ->join('brands','models.brand_id','=','brands.id')
             ->select('services.name', 'models.name as models_name','brands.name as brands_name','vehicles.placa','reservations.date_reservation','reservations.time_reservation')
-            ->where('reservations.state_id','=',3);
+            ->where('reservations.state_id','=',3)
+            ->where('reservations.updated_by', '=', auth()->id());
     }
     #[On('tableRefresh')]
     public function tableRefresh(): void {}
