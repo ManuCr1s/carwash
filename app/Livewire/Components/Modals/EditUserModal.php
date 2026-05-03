@@ -5,6 +5,7 @@ namespace App\Livewire\Components\Modals;
 use Livewire\Component;
 use App\Models\User;
 use Livewire\Attributes\On;
+use Illuminate\Support\Facades\Hash;
 
 class EditUserModal extends Component
 {
@@ -14,6 +15,8 @@ class EditUserModal extends Component
     public $lastname;
     public $dni;
     public $phone;
+    public $password;
+    public $password_confirmation;
     public bool $show = false;
 
     protected function rules(): array
@@ -23,7 +26,8 @@ class EditUserModal extends Component
             'email' => 'required|email|unique:users,email,' . $this->userId,
             'dni' => 'required|max:8|unique:users,dni,' . $this->userId,
             'phone'    => 'required|numeric|digits_between:7,15',
-            'lastname' => 'required|string|max:255'
+            'lastname' => 'required|string|max:255',
+            'password' => 'nullable|min:6|confirmed',
         ];
     }
 
@@ -74,16 +78,24 @@ class EditUserModal extends Component
 
     public function update()
     {
+        $this->password = trim($this->password);
+        $this->password_confirmation = trim($this->password_confirmation);
+
         $this->validate();
 
-         User::where('id', $this->userId)
-        ->update([               
-            'name'  => strtoupper($this->name),
-            'email' => strtoupper($this->email),
-            'phone' => strtoupper($this->phone),
-            'dni' => strtoupper($this->dni),
+        $data = [
+            'name'     => strtoupper($this->name),
+            'email'    => strtoupper($this->email),
+            'phone'    => strtoupper($this->phone),
+            'dni'      => strtoupper($this->dni),
             'lastname' => strtoupper($this->lastname),
-        ]);
+        ];
+
+        if (!empty($this->password)) {
+            $data['password'] = Hash::make($this->password);
+        }
+
+        User::where('id', $this->userId)->update($data);
 
         $this->show = false;
         $this->dispatch('tableRefresh');

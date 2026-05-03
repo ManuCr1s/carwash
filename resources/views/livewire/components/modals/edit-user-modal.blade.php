@@ -73,7 +73,23 @@
                             @error('phone') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
                         </div> 
                     </div>
+                     <div class="grid grid-cols-2 md:grid-cols-2 gap-2 mt-4">
+                        <input type="password" 
+                            wire:model="password"
+                            placeholder="Contraseña (opcional)"
+                            class="w-full border rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500">
+                        @error('password') 
+                            <span class="text-red-500 text-xs">{{ $message }}</span> 
+                        @enderror
 
+                        <input type="password" 
+                            wire:model="password_confirmation"
+                            placeholder="Confirmar contraseña"
+                            class="w-full border rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500">
+                        @error('password_confirmation') 
+                            <span class="text-red-500 text-xs">{{ $message }}</span> 
+                        @enderror
+                    </div>
 
                 </div>
 
@@ -96,7 +112,7 @@
 
                     <button wire:click="update"
                         class="px-5 py-2 text-sm text-white bg-blue-600 rounded-lg hover:bg-blue-700 shadow">
-                        Ingresar Usuario
+                        Actualizar Usuario
                     </button>
                 </div>
 

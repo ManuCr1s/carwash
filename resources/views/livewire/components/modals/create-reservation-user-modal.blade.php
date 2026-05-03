@@ -245,7 +245,7 @@
 
                     <button wire:click="save"
                         class="px-5 py-2 text-sm text-white bg-blue-600 rounded-lg hover:bg-blue-700 shadow">
-                        Ingresar Usuario
+                        Realizar Reserva
                     </button>
                 </div>
 
