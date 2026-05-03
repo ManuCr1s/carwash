@@ -73,6 +73,7 @@
                                 wire:model="marca"
                                 wire:keyup="buscar('marca')"
                                 placeholder="Marca"
+                                
                                 class="w-full border rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500">
                             @if(!empty($resultadosMarca))
                                 
@@ -89,25 +90,27 @@
                             @error('marca') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
                         </div>
 
-                        <div>
-                           <input type="text" 
+                       <div class="relative"> 
+                            <input type="text" 
                                 wire:model="modelo"
                                 wire:keyup="buscar('modelo')"
-                                placeholder="Modelo"
+                                placeholder="{{ empty($marca) ? 'Primero seleccione una marca' : 'Modelo' }}"
+                                @disabled(empty($marca))
                                 class="w-full border rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500">
+
                             @if(!empty($resultadosModelo))
-                                
-                                <ul class="absolute z-50 border rounded-lg mt-1 bg-white shadow max-h-40 overflow-y-auto">
-                                    @foreach($resultadosModelo as  $id => $item)
+                                <ul 
+                                    wire:key="lista-modelos-{{ count($resultadosModelo) }}" 
+                                    class="absolute z-50 border rounded-lg mt-1 bg-white shadow max-h-40 overflow-y-auto w-full">
+                                    @foreach($resultadosModelo as $id => $item)
                                         <li 
                                             wire:click="seleccionar('modelo', {{ $id }}, '{{ $item }}')"
-                                            class="px-3 py-2 hover:bg-blue-100 cursor-pointer pr-20">
+                                            class="px-3 py-2 hover:bg-blue-100 cursor-pointer">
                                             {{ $item }}
                                         </li>
                                     @endforeach
                                 </ul>
                             @endif
-                            @error('modelo') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
                         </div>
 
                     </div>

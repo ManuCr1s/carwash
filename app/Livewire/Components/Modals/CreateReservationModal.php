@@ -30,9 +30,31 @@ class CreateReservationModal extends Component
     protected $messages = [];
     public $vehiculos = [];
     public $vehicle_id = '';
+    public function updatedMarca($value)
+    {
+        $marca = Brand::where('name', $value)->first();
+
+        if ($marca) {
+            $this->marca_id = $marca->id;
+
+        } else {
+            $this->marca_id = null;
+        }
+
+        // limpiar modelo
+        $this->modelo = '';
+        $this->modelo_id = null;
+        $this->resultadosModelo = [];
+    }
+    
     public function buscar($tipo)
     {
         if ($tipo === 'marca') {
+            if (!empty($this->marca_id)) {
+                $this->resultadosMarca = [];
+                return;
+            }
+
             if (strlen($this->marca) < 1) {
                 $this->resultadosMarca = [];
                 return;
@@ -44,12 +66,23 @@ class CreateReservationModal extends Component
                 ->toArray();
         }
         if ($tipo === 'modelo') {
-            if (strlen($this->modelo) < 1) {
+            if (empty($this->marca_id) || strlen($this->modelo) < 1) {
                 $this->resultadosModelo = [];
                 return;
             }
+ 
+            $modeloExacto = Models::where('brand_id', $this->marca_id)
+                ->where('name', trim($this->modelo))
+                ->first();
 
-            $this->resultadosModelo = Models::where('name', 'LIKE', $this->modelo . '%')
+            if ($modeloExacto) {
+                $this->modelo_id = $modeloExacto->id;
+                $this->resultadosModelo = []; 
+                return;
+            }
+
+            $this->resultadosModelo = Models::where('brand_id', $this->marca_id)
+                ->where('name', 'LIKE', $this->modelo . '%')
                 ->limit(5)
                 ->pluck('name', 'id')
                 ->toArray();
@@ -167,12 +200,13 @@ class CreateReservationModal extends Component
         }
         
         $this->dispatch('reservationCreated');
-        
+        $this->reset();
         $this->show = false;
         $this->dispatch('swal', [
             'icon' => 'success',
             'title' => 'Reserva registrada correctamente'
         ]);
+        
     }
     public function render()
     {
