@@ -65,7 +65,8 @@
                                 wire:model="modelo"
                                 wire:keyup="buscar('modelo')"
                                 placeholder="Modelo"
-                                class="w-full border rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500">
+                                class="w-full border rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 
+                                    disabled:bg-gray-200 disabled:text-gray-500 disabled:cursor-not-allowed">
                             @if(!empty($resultadosModelo))
                                 
                                <ul class="absolute z-50 border rounded-lg mt-1 bg-white shadow max-h-40 overflow-y-auto">
@@ -105,7 +106,7 @@
 
                     <button wire:click="update"
                         class="px-5 py-2 text-sm text-white bg-blue-600 rounded-lg hover:bg-blue-700 shadow">
-                        Ingresar Usuario
+                        Actualizar Vehiculo
                     </button>
                 </div>
 

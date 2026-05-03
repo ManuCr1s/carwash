@@ -19,7 +19,22 @@ class EditVehicleModal extends Component
     public $resultadosMarca = [];
     public $resultadosModelo = [];
     public $placa;
-    
+    public function updatedMarca($value)
+    {
+        $marca = Brand::where('name', $value)->first();
+
+        if ($marca) {
+            $this->marca_id = $marca->id;
+
+        } else {
+            $this->marca_id = null;
+        }
+
+        // limpiar modelo
+        $this->modelo = '';
+        $this->modelo_id = null;
+        $this->resultadosModelo = [];
+    }
     protected function rules(): array
     {
         return [
@@ -44,6 +59,11 @@ class EditVehicleModal extends Component
     public function buscar($tipo)
     {
         if ($tipo === 'marca') {
+            if (!empty($this->marca_id)) {
+                $this->resultadosMarca = [];
+                return;
+            }
+
             if (strlen($this->marca) < 1) {
                 $this->resultadosMarca = [];
                 return;
@@ -55,12 +75,23 @@ class EditVehicleModal extends Component
                 ->toArray();
         }
         if ($tipo === 'modelo') {
-            if (strlen($this->modelo) < 1) {
+            if (empty($this->marca_id) || strlen($this->modelo) < 1) {
                 $this->resultadosModelo = [];
                 return;
             }
+ 
+            $modeloExacto = Models::where('brand_id', $this->marca_id)
+                ->where('name', trim($this->modelo))
+                ->first();
 
-            $this->resultadosModelo = Models::where('name', 'LIKE', $this->modelo . '%')
+            if ($modeloExacto) {
+                $this->modelo_id = $modeloExacto->id;
+                $this->resultadosModelo = []; 
+                return;
+            }
+
+            $this->resultadosModelo = Models::where('brand_id', $this->marca_id)
+                ->where('name', 'LIKE', $this->modelo . '%')
                 ->limit(5)
                 ->pluck('name', 'id')
                 ->toArray();
@@ -90,6 +121,10 @@ class EditVehicleModal extends Component
     {         
         $vehicle = Vehicle::find($id);
         $this->placa = $vehicle->placa;
+        $this->modelo = $vehicle->model?->name;
+        $this->modelo_id = $vehicle->model?->id;
+        $this->marca  = $vehicle->model?->brand?->name;
+        $this->marca_id = $vehicle->model?->brand?->id;
         $this->vehicleId = $vehicle->id;
         $this->show   = true;
     }
@@ -102,7 +137,7 @@ class EditVehicleModal extends Component
             'placa'  => strtoupper($this->placa),
             'model_id' => strtoupper($this->modelo_id ),
         ]);
-
+        $this->reset();
         $this->show = false;
         $this->dispatch('tableRefresh');
 
