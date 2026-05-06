@@ -29,10 +29,6 @@ class ResponseRequestTable extends LivewireTable
     {
         $this->dispatch('openHandleModal', id: $id);
     }
-    public function create($id)
-    {
-        $this->dispatch('openCreateModal', id:$id);
-    }
     #[On('tableRefresh')]
     public function tableRefresh(): void {}
     protected function columns(): array{

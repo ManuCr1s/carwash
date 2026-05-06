@@ -6,8 +6,12 @@ use Illuminate\Database\Eloquent\Model;
 
 class Service extends Model
 {
-   public function getSlotsCountAttribute()
+    public function getSlotsCountAttribute()
     {
         return (int) ceil($this->duration); 
     }
+    protected $casts = [
+        'duration' => 'float',
+        'status'   => 'boolean',
+    ];
 }

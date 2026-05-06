@@ -1,19 +1,19 @@
 <div>
     @if($show)
-    <div class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+    <div wire:key="reservation-modal-{{ $reservationId }}"  class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
 
         <div class="bg-white rounded-lg shadow-xl w-full max-w-md mx-4 max-h-[90vh] flex flex-col">
 
             <!-- HEADER -->
             <div class="flex items-center justify-between px-6 py-4 border-b">
                 <div>
-                    <h3 class="text-lg font-bold text-gray-800">Ingresar Datos de Reservacion</h3>
+                    <h3 class="text-lg font-bold text-gray-800">{{ $mode === 'create' ? 'Nueva Reservación' : 'Editar Reservación' }}</h3>
                     <p class="text-xs text-gray-500">
                 
                     </p>
                 </div>
 
-                <button wire:click="$set('show', false)" class="text-gray-400 hover:text-gray-600">
+                <button wire:click="close" class="text-gray-400 hover:text-gray-600">
                     ✕
                 </button>
             </div>
@@ -238,7 +238,7 @@
                 </span>
 
                 <div class="flex gap-2">
-                    <button wire:click="$set('show', false)"
+                    <button wire:click="close"
                         class="px-4 py-2 text-sm bg-gray-100 rounded-lg hover:bg-gray-200">
                         Cancelar
                     </button>

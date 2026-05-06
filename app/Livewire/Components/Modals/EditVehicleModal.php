@@ -38,7 +38,7 @@ class EditVehicleModal extends Component
     protected function rules(): array
     {
         return [
-            'placa' => 'required|min:6|unique:vehicles,placa,'.$this->vehicleId,
+            'placa' => 'required|size:6|unique:vehicles,placa,'.$this->vehicleId,
             'modelo' => 'required',
             'marca' => 'required',
         ];
@@ -48,7 +48,7 @@ class EditVehicleModal extends Component
     {
          return [
             'placa.required' => 'La placa es obligatoria',
-            'placa.min' => 'La placa debe tener al menos 6 caracteres',
+            'placa.size' => 'La placa debe tener 6 caracteres',
             'placa.unique' => 'Este numero de placa ya se encuentra registrado',
 
             'marca.required' => 'La marca es obligatoria',

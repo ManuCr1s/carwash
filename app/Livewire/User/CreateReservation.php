@@ -34,35 +34,37 @@ class CreateReservation extends Component
 
         return $this->cachedService;
     }
-    public function getOccupiedSlotsProperty()
-    {
-       /*  if (!$this->service_id) {
-            return [];
-        }
-        $servicioActual = Service::find($this->service_id); */
-        $servicioActual = $this->servicioActual;
-        if (!$servicioActual) return [];
-        $reservasDelDia = Reservation::where('date_reservation', $this->selectedDate)
-        ->whereHas('service', function($q) use ($servicioActual) {
+   public function getOccupiedSlotsProperty(): array
+{
+    $servicioActual = $this->servicioActual;
+    if (!$servicioActual) return [];
+
+    $reservasDelDia = Reservation::with('service')
+        ->where('date_reservation', $this->selectedDate)
+        ->whereHas('service', function ($q) use ($servicioActual) {
             $q->where('group_id', $servicioActual->group_id);
         })
         ->get();
 
-        if ($servicioActual->group_id == 2 && $reservasDelDia->count() > 0) {
-            return $this->slots; 
-        }
-
-        return $reservasDelDia->pluck('time_reservation')
-            ->map(fn($time) => substr($time, 0, 5))
-            ->toArray();
-    /*     return Reservation::where('date_reservation', $this->selectedDate)
-            ->whereHas('service', function($q) use ($servicioActual) {
-                    $q->where('group_id', $servicioActual->group_id);
-                })
-            ->pluck('time_reservation')
-            ->map(fn($time) => substr($time, 0, 5))
-            ->toArray(); */
+    // Grupo 2 (Salón): bloquea todo el día
+    if ($servicioActual->group_id == 2 && $reservasDelDia->count() > 0) {
+        return $this->slots;
     }
+
+    // Grupo 1 (Lavados): bloquea el slot de inicio + los slots que dura el servicio
+    $blocked = [];
+
+    foreach ($reservasDelDia as $reserva) {
+        $duration    = (int) ceil((float) $reserva->service->duration);
+        $reservaStart = Carbon::createFromFormat('H:i:s', $reserva->time_reservation);
+
+        for ($i = 0; $i < $duration; $i++) {
+            $blocked[] = $reservaStart->copy()->addHours($i)->format('H:i');
+        }
+    }
+
+    return array_unique($blocked);
+}
     public function getFinalSlotsProperty()
     {
         $servicio = $this->servicioActual; // Misma consulta que arriba
