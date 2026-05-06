@@ -11,5 +11,6 @@
         <div class="w-full max-w-5xl">
             <livewire:components.tables.response-dispatch-table />
             <livewire:components.modals.dispatch-reservation-modal />
+            <livewire:components.modals.create-reservation-user-modal />
         </div>
     </div>
